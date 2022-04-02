@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="PT-BR" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/head">
+    <title id="pageTitle">Lista de Eventos</title>
+</head>
+
+<body>
+    <header th:replace="fragments/navbar :: index"></header>
+
+    <main>
+        <table class="table table-dark table-bordered table-hover">
+            <caption>Lista de eventos disponíveis</caption>
+            <thead>
+                <tr>
+                    <th width="40%">Nome</th>
+                    <th width="30%">Local</th>
+                    <th width="12%">Data</th>
+                    <th width="8%">Horário</th>
+                    <th width="10%">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="evento : ${eventos}">
+                    <td th:text="${evento.nome}"></td>
+                    <td th:text="${evento.local}"></td>
+                    <td th:text="${evento.data}"></td>
+                    <td th:text="${evento.horario}"></td>
+                    <td>
+                        <button class="btn-icons">
+                            <a th:href="${(#mvc.url('EC#detalhesEvento').arg(0, evento.codigo)).build()}">
+                                <i class="material-icons text-success">visibility</i></a>
+                        </button>
+                        <button class="btn-icons">
+                            <a href="/"><i class="material-icons text-primary">edit</i></a>
+                        </button>
+                        <button class="btn-icons">
+                            <a th:attr="onclick=|deleteEvent('${evento.codigo}', '${evento.nome}')|">
+                                <i class="material-icons text-danger">delete</i>
+                            </a>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+
+    <div th:replace="fragments/bottom"></div>
+</body>
+
+</html>
