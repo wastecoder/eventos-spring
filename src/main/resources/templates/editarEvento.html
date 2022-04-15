@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="PT-BR" xmlns:th="http://thymeleaf.org">
+
+<head th:replace="fragments/head">
+    <title id="pageTitle">Atualização de Eventos</title>
+</head>
+
+<body>
+    <header th:replace="fragments/navbar :: createEvent"></header>
+
+    <main>
+        <div class="central-form">
+            <h2 class="form-title">Atualizar</h2>
+            <th:block th:insert="fragments/formWarning"></th:block>
+
+            <form method="POST" class="form-body" th:action="@{editarEvento-{codigo}(codigo = ${evento.codigo})}">
+                <div class="row">
+                    <div class="form-floating col-md-12">
+                        <input type="text" id="fnome" name="nome" class="form-control" placeholder=" " th:field="*{evento.nome}" required minlength="3" maxlength="60">
+                        <label for="fnome">Nome</label>
+                    </div>
+
+                    <div class="form-floating col-md-12">
+                        <input type="text" id="flocal" name="local" class="form-control" placeholder=" " th:field="*{evento.local}" required maxlength="30">
+                        <label for="flocal">Local</label>
+                    </div>
+
+                    <div class="form-floating col-md-6">
+                        <input type="date" id="fdata" name="data" class="form-control" th:field="*{evento.data}" required>
+                        <label for="fdata">Data</label>
+                    </div>
+
+                    <div class="form-floating col-md-6">
+                        <input type="time" id="fhorario" name="horario" class="form-control" th:field="*{evento.horario}" required>
+                        <label for="fhorario">Horário</label>
+                    </div>
+
+                    <button class="btn btn-primary btn-form" type="submit">
+                        <i class="fas fa-solid fa-upload"></i>Enviar</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <div th:replace="fragments/bottom"></div>
+</body>
+
+</html>

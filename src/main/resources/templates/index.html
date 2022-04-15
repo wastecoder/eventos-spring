@@ -32,7 +32,7 @@
                                 <i class="material-icons text-success">visibility</i></a>
                         </button>
                         <button class="btn-icons">
-                            <a href="/"><i class="material-icons text-primary">edit</i></a>
+                            <a th:href="${(#mvc.url('EC#editarEvento').arg(0, evento.codigo)).build()}"><i class="material-icons text-primary">edit</i></a>
                         </button>
                         <button class="btn-icons">
                             <a th:attr="onclick=|deleteEvent('${evento.codigo}', '${evento.nome}')|">

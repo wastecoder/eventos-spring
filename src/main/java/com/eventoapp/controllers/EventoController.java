@@ -5,9 +5,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -15,6 +13,8 @@ import com.eventoapp.models.Convidado;
 import com.eventoapp.models.Evento;
 import com.eventoapp.repository.ConvidadoRepository;
 import com.eventoapp.repository.EventoRepository;
+
+import java.util.Optional;
 
 @Controller
 public class EventoController {
@@ -88,5 +88,37 @@ public class EventoController {
 		long codigoEvento = evento.getCodigo();
 		String codigo = Long.toString(codigoEvento);
 		return "redirect:/" + codigo;
+	}
+
+	@GetMapping("/editarEvento-{codigo}")
+	public ModelAndView editarEvento(@PathVariable("codigo") Long codigo){
+		Evento evento5 = er.findByCodigo(codigo);
+		ModelAndView mv = new ModelAndView("editarEvento");
+		mv.addObject("evento", evento5);
+		return mv;
+	}
+
+	@PostMapping("/editarEvento-{codigo}")
+	public String salvarEdicaoEvento(@PathVariable("codigo") Long codigo, @Valid Evento evento, BindingResult result, RedirectAttributes attributes) {
+		long codigoEvento = evento.getCodigo();
+		String codigoUrl = Long.toString(codigoEvento);
+
+		if(result.hasErrors()) {
+			attributes.addFlashAttribute("mensagem", "Campos inválidos!");
+			return "redirect:/editarEvento-" + codigoUrl;
+		}
+
+		Optional<Evento> evento6 = er.findById(codigo);
+		if (evento6.isPresent()) {
+			Evento storeEvent = evento6.get();
+			storeEvent.setNome(evento.getNome());
+			storeEvent.setLocal(evento.getLocal());
+			storeEvent.setData(evento.getData());
+			storeEvent.setHorario(evento.getHorario());
+			er.save(storeEvent);
+		}
+
+		attributes.addFlashAttribute("mensagem", "Evento atualizado com sucesso!");
+		return "redirect:/editarEvento-" + codigoUrl;
 	}
 }
