@@ -17,36 +17,37 @@ import com.eventoapp.repository.EventoRepository;
 import java.util.Optional;
 
 @Controller
+@RequestMapping("/eventos")
 public class EventoController {
 	@Autowired
 	private EventoRepository er;
-	
+
 	@Autowired
 	private ConvidadoRepository cr;
-	
-	@RequestMapping(value="/cadastrarEvento", method=RequestMethod.GET)
-	public String form() {
-		return "formEvento";
-	}
-	
-	@RequestMapping(value="/cadastrarEvento", method=RequestMethod.POST)
-	public String form(@Valid Evento evento, BindingResult result) {
-		if(result.hasErrors()) {
-			return "redirect:/cadastrarEvento";
-		}
-		er.save(evento);
-		return "redirect:/";
-	}
-	
-	@RequestMapping("/")
+
+	@GetMapping
 	public ModelAndView listaEventos() {
 		ModelAndView mv = new ModelAndView("index");
 		Iterable<Evento> event1 = er.findAll();
 		mv.addObject("eventos", event1);
 		return mv;
 	}
-	
-	@RequestMapping(value="/{codigo}", method=RequestMethod.GET)
+
+	@GetMapping("/cadastrar-evento")
+	public String form() {
+		return "formEvento";
+	}
+
+	@PostMapping("/cadastrar-evento")
+	public String form(@Valid Evento evento, BindingResult result) {
+		if(result.hasErrors()) {
+			return "redirect:/cadastrar-evento";
+		}
+		er.save(evento);
+		return "redirect:/eventos";
+	}
+
+	@GetMapping("/detalhes/{codigo}")
 	public ModelAndView detalhesEvento(@PathVariable("codigo") long codigo) {
 		Evento event2 = er.findByCodigo(codigo);
 		ModelAndView mv = new ModelAndView("detalhesEvento");
@@ -58,39 +59,39 @@ public class EventoController {
 		return mv;
 	}
 	
-	@RequestMapping(value="/{codigo}", method=RequestMethod.POST)
+	@PostMapping("/detalhes/{codigo}")
 	public String detalhesEventoPost(@PathVariable("codigo") long codigo, @Valid Convidado convidado, BindingResult result, RedirectAttributes attributes) {
 		if(result.hasErrors()) {
 			attributes.addFlashAttribute("mensagem", "Campos inválidos!");
-			return "redirect:/{codigo}";
+			return "redirect:/eventos/detalhes/{codigo}";
 		}
 		
 		Evento event3 = er.findByCodigo(codigo);
 		convidado.setEvento(event3);
 		cr.save(convidado);
 		attributes.addFlashAttribute("mensagem", "Convidado adicionado com sucesso!");
-		return "redirect:/{codigo}";
+		return "redirect:/eventos/detalhes/{codigo}";
 	}
 	
-	@RequestMapping(value="/deletarEvento", method=RequestMethod.GET)
-	public String deletarEvento(long codigo) {
+	@GetMapping("/deletar-evento/{codigo}")
+	public String deletarEvento(@PathVariable("codigo") long codigo) {
 		Evento event4 = er.findByCodigo(codigo);
 		er.delete(event4);
-		return "redirect:/";
+		return "redirect:/eventos";
 	}
 	
-	@RequestMapping(value="/deletarConvidado", method=RequestMethod.GET)
-	public String deletarConvidado(String rg) {
+	@GetMapping("/deletar-convidado/{rg}")
+	public String deletarConvidado(@PathVariable("rg") String rg) {
 		Convidado convidado = cr.findByRg(rg);
 		cr.delete(convidado);
 		
 		Evento evento = convidado.getEvento();
-		long codigoEvento = evento.getCodigo();
-		String codigo = Long.toString(codigoEvento);
-		return "redirect:/" + codigo;
+		long codigo = evento.getCodigo();
+		String codigoEvento = Long.toString(codigo);
+		return "redirect:/eventos/detalhes/" + codigoEvento;
 	}
 
-	@GetMapping("/editarEvento-{codigo}")
+	@GetMapping("/editar-evento/{codigo}")
 	public ModelAndView editarEvento(@PathVariable("codigo") Long codigo){
 		Evento evento5 = er.findByCodigo(codigo);
 		ModelAndView mv = new ModelAndView("editarEvento");
@@ -98,14 +99,14 @@ public class EventoController {
 		return mv;
 	}
 
-	@PostMapping("/editarEvento-{codigo}")
+	@PostMapping("/editar-evento/{codigo}")
 	public String salvarEdicaoEvento(@PathVariable("codigo") Long codigo, @Valid Evento evento, BindingResult result, RedirectAttributes attributes) {
 		long codigoEvento = evento.getCodigo();
 		String codigoUrl = Long.toString(codigoEvento);
 
 		if(result.hasErrors()) {
 			attributes.addFlashAttribute("mensagem", "Campos inválidos!");
-			return "redirect:/editarEvento-" + codigoUrl;
+			return "redirect:/eventos/editar-evento/" + codigoUrl;
 		}
 
 		Optional<Evento> evento6 = er.findById(codigo);
@@ -119,6 +120,6 @@ public class EventoController {
 		}
 
 		attributes.addFlashAttribute("mensagem", "Evento atualizado com sucesso!");
-		return "redirect:/editarEvento-" + codigoUrl;
+		return "redirect:/eventos/editar-evento/" + codigoUrl;
 	}
 }

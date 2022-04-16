@@ -13,7 +13,7 @@
             <h2 class="form-title">Atualizar</h2>
             <th:block th:insert="fragments/formWarning"></th:block>
 
-            <form method="POST" class="form-body" th:action="@{editarEvento-{codigo}(codigo = ${evento.codigo})}">
+            <form method="POST" class="form-body" th:action="@{{codigo}(codigo = ${evento.codigo})}">
                 <div class="row">
                     <div class="form-floating col-md-12">
                         <input type="text" id="fnome" name="nome" class="form-control" placeholder=" " th:field="*{evento.nome}" required minlength="3" maxlength="60">

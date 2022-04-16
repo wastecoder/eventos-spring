@@ -2,32 +2,16 @@
 
 function deleteEvent(id, name) {
     option = confirm("Deseja excluir o evento [" + name + "]?");
-    if (option) {
-        $.ajax({
-            type: "GET",
-            url: "/deletarEvento",
-            async: false,
-            data: "codigo=" + id,
-            success: function () {
-                alert("Evento excluído com sucesso!");
-                location.replace("/");
-            }
-        });
+    if (option){
+        alert("Evento excluído com sucesso!");
+        window.location.replace("/eventos/deletar-evento/" + id);
     }
 }
 
-function deleteGuest(guestId, guestName, eventId) {
+function deleteGuest(guestId, guestName) {
     option = confirm("Deseja excluir o convidado [" + guestName + "]?");
     if (option) {
-        $.ajax({
-            type: "GET",
-            url: "/deletarConvidado",
-            async: false,
-            data: "rg=" + guestId,
-            success: function () {
-                alert("Convidado excluído com sucesso!");
-                location.replace("/" + eventId);
-            }
-        });
+        alert("Convidado excluído com sucesso!");
+        window.location.replace("/eventos/deletar-convidado/" + guestId);
     }
 }
