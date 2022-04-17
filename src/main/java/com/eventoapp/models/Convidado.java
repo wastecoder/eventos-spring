@@ -5,18 +5,22 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "Convidado")
 public class Convidado {
 		//Atributos - colunas da tabela
 	@Id
-	@NotEmpty
-	@Column(length = 12)
+	@NotEmpty @NotBlank
+	@Size(min = 9, max = 12)
+	@Column(nullable = false, length = 12)
 	private String rg;
-	@NotEmpty
-	@Column(length = 60)
+	@NotEmpty @NotBlank
+	@Size(min = 3, max = 60)
+	@Column(nullable = false, length = 60)
 	private String nomeConvidado;
 	
 		//Cardinalidade

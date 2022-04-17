@@ -11,8 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 @Entity
 @Table(name = "Evento")
@@ -24,17 +23,20 @@ public class Evento implements Serializable{
 	private long codigo;
 	
 		//Atributos - colunas da tabela
-	@NotEmpty(message = "Nome vázio, preencha novamente.")
-	@Size(min = 3, max = 60, message = "Nome: min 3, max 60.")
+	@NotEmpty @NotBlank
+	@Size(min = 3, max = 60)
 	@Column(nullable = false, length = 60)
 	private String nome;
-	@NotEmpty(message = "Local vázio...")
+	@NotEmpty @NotBlank
+	@Size(min = 10, max = 30)
 	@Column(nullable = false, length = 30)
 	private String local;
-	@NotEmpty
+	@NotEmpty @NotBlank
+	@Size(min = 8, max = 10)
 	@Column(nullable = false, length = 10)
 	private String data;
-	@NotEmpty
+	@NotEmpty @NotBlank
+	@Size(min = 4, max = 5)
 	@Column(nullable = false, length = 5)
 	private String horario;
 	
