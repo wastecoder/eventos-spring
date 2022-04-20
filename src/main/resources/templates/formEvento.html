@@ -15,23 +15,27 @@
             <form th:object="${eventoDto}" method="POST" class="form-body">
                 <div class="row">
                     <div class="form-floating col-md-12">
-                        <input type="text" class="form-control" placeholder=" " th:field="*{nome}">
+                        <input type="text" class="form-control" placeholder=" " th:field="*{nome}"  th:errorclass="is-invalid" required maxlength="60">
                         <label>Nome</label>
+                        <div class="invalid-feedback" th:errors="*{nome}"></div>
                     </div>
 
                     <div class="form-floating col-md-12">
-                        <input type="text" class="form-control" placeholder=" " th:field="*{local}">
+                        <input type="text" class="form-control" placeholder=" " th:field="*{local}"  th:errorclass="is-invalid" required maxlength="30">
                         <label>Local</label>
+                        <div class="invalid-feedback" th:errors="*{local}"></div>
                     </div>
 
                     <div class="form-floating col-md-6">
-                        <input type="date" class="form-control" th:field="*{data}">
+                        <input type="date" class="form-control" th:field="*{data}"  th:errorclass="is-invalid" required>
                         <label>Data</label>
+                        <div class="invalid-feedback" th:errors="*{data}"></div>
                     </div>
 
                     <div class="form-floating col-md-6">
-                        <input type="time" class="form-control" th:field="*{horario}">
+                        <input type="time" class="form-control" th:field="*{horario}"  th:errorclass="is-invalid" required>
                         <label>Horário</label>
+                        <div class="invalid-feedback" th:errors="*{horario}"></div>
                     </div>
 
                     <button class="btn btn-primary btn-form" type="submit">

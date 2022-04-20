@@ -12,11 +12,13 @@ import javax.validation.constraints.Size;
 // Evento = configura a criação de tabela
 // OBS: Se colocar @Entity criará uma tabela no banco
 public class EventoDto {
-    @NotEmpty @NotBlank
-    @Size(min = 3, max = 60)
+    @NotEmpty(message = "Nome não pode ser vázio")
+    @NotBlank(message = "Nome não pode começar com espaço")
+    @Size(min = 3, max = 60, message = "Nome deve ter entre 3 e 60 caracteres")
     private String nome;
-    @NotEmpty @NotBlank
-    @Size(min = 10, max = 30)
+    @NotEmpty(message = "Local não pode ser vázio")
+    @NotBlank(message = "Local não pode começar com espaço")
+    @Size(min = 10, max = 30, message = "Local deve ter entre 10 e 30 caracteres")
     private String local;
     @NotEmpty @NotBlank
     @Size(min = 8, max = 10)
