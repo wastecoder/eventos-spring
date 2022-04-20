@@ -2,6 +2,7 @@ package com.eventoapp.controllers;
 
 import javax.validation.Valid;
 
+import com.eventoapp.dtos.EventoDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -39,9 +40,10 @@ public class EventoController {
 	}
 
 	@PostMapping("/cadastrar-evento")
-	public String form(@Valid Evento evento, BindingResult result) {
+	public String form(@Valid EventoDto requisicao, BindingResult result) {
+		Evento evento = requisicao.toEvento();
 		if(result.hasErrors()) {
-			return "redirect:/cadastrar-evento";
+			return "redirect:/eventos/cadastrar-evento";
 		}
 		er.save(evento);
 		return "redirect:/eventos";
@@ -100,22 +102,22 @@ public class EventoController {
 	}
 
 	@PostMapping("/editar-evento/{codigo}")
-	public String salvarEdicaoEvento(@PathVariable("codigo") Long codigo, @Valid Evento evento, BindingResult result, RedirectAttributes attributes) {
-		long codigoEvento = evento.getCodigo();
-		String codigoUrl = Long.toString(codigoEvento);
+	public String salvarEdicaoEvento(@PathVariable("codigo") Long codigo, @Valid EventoDto requisicao, BindingResult result, RedirectAttributes attributes) {
+		String codigoUrl = Long.toString(codigo);
 
 		if(result.hasErrors()) {
 			attributes.addFlashAttribute("mensagem", "Campos inválidos!");
 			return "redirect:/eventos/editar-evento/" + codigoUrl;
 		}
 
+		Evento eventoValidado = requisicao.toEvento();
 		Optional<Evento> evento6 = er.findById(codigo);
 		if (evento6.isPresent()) {
 			Evento storeEvent = evento6.get();
-			storeEvent.setNome(evento.getNome());
-			storeEvent.setLocal(evento.getLocal());
-			storeEvent.setData(evento.getData());
-			storeEvent.setHorario(evento.getHorario());
+			storeEvent.setNome(eventoValidado.getNome());
+			storeEvent.setLocal(eventoValidado.getLocal());
+			storeEvent.setData(eventoValidado.getData());
+			storeEvent.setHorario(eventoValidado.getHorario());
 			er.save(storeEvent);
 		}
 
