@@ -35,18 +35,18 @@ public class EventoController {
 	}
 
 	@GetMapping("/cadastrar-evento")
-	public String form() {
+	public String form(EventoDto requisicao) { //Para não dar erro no th:object
 		return "formEvento";
 	}
 
 	@PostMapping("/cadastrar-evento")
-	public String form(@Valid EventoDto requisicao, BindingResult result) {
+	public ModelAndView form(@Valid EventoDto requisicao, BindingResult result) {
 		Evento evento = requisicao.toEvento();
 		if(result.hasErrors()) {
-			return "redirect:/eventos/cadastrar-evento";
+			return new ModelAndView("formEvento"); //Retorna e exibe o que já foi preenchido
 		}
 		er.save(evento);
-		return "redirect:/eventos";
+		return new ModelAndView("redirect:/eventos");
 	}
 
 	@GetMapping("/detalhes/{codigo}")

@@ -12,26 +12,26 @@
         <div class="central-form">
             <h2 class="form-title">Cadastrar</h2>
 
-            <form method="POST" class="form-body">
+            <form th:object="${eventoDto}" method="POST" class="form-body">
                 <div class="row">
                     <div class="form-floating col-md-12">
-                        <input type="text" id="fnome" name="nome" class="form-control" placeholder=" " required minlength="3" maxlength="60">
-                        <label for="fnome">Nome</label>
+                        <input type="text" class="form-control" placeholder=" " th:field="*{nome}">
+                        <label>Nome</label>
                     </div>
 
                     <div class="form-floating col-md-12">
-                        <input type="text" id="flocal" name="local" class="form-control" placeholder=" " required minlength="10" maxlength="30">
-                        <label for="flocal">Local</label>
+                        <input type="text" class="form-control" placeholder=" " th:field="*{local}">
+                        <label>Local</label>
                     </div>
 
                     <div class="form-floating col-md-6">
-                        <input type="date" id="fdata" name="data" class="form-control" required>
-                        <label for="fdata">Data</label>
+                        <input type="date" class="form-control" th:field="*{data}">
+                        <label>Data</label>
                     </div>
 
                     <div class="form-floating col-md-6">
-                        <input type="time" id="fhorario" name="horario" class="form-control" required>
-                        <label for="fhorario">Horário</label>
+                        <input type="time" class="form-control" th:field="*{horario}">
+                        <label>Horário</label>
                     </div>
 
                     <button class="btn btn-primary btn-form" type="submit">
