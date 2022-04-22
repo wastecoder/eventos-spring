@@ -3,9 +3,7 @@
     xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
-<head th:replace="fragments/head">
-    <title id="pageTitle">Detalhes do Evento</title>
-</head>
+<head th:replace="fragments/head :: general('Detalhes do Evento')"></head>
 
 <body>
     <header th:replace="fragments/navbar :: viewEvent"></header>
