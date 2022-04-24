@@ -95,33 +95,36 @@ public class EventoController {
 
 	@GetMapping("/editar-evento/{codigo}")
 	public ModelAndView editarEvento(@PathVariable("codigo") Long codigo){
-		Evento evento5 = er.findByCodigo(codigo);
-		ModelAndView mv = new ModelAndView("editarEvento");
-		mv.addObject("eventoDto", evento5);
-		return mv;
+		Optional<Evento> evento5 = er.findById(codigo);
+		if (evento5.isPresent()) {
+			ModelAndView mv = new ModelAndView("editarEvento");
+			mv.addObject("eventoDto", evento5);
+			return mv;
+
+		}else {
+			return new ModelAndView("redirect:/eventos");
+		}
 	}
 
 	@PostMapping("/editar-evento/{codigo}")
-	public String salvarEdicaoEvento(@PathVariable("codigo") Long codigo, @Valid EventoDto requisicao, BindingResult result, RedirectAttributes attributes) {
-		String codigoUrl = Long.toString(codigo);
-
+	public ModelAndView salvarEdicaoEvento(@PathVariable("codigo") Long codigo, @Valid EventoDto requisicao, BindingResult result) {
 		if(result.hasErrors()) {
-			attributes.addFlashAttribute("mensagem", "Campos inválidos!");
-			return "redirect:/eventos/editar-evento/" + codigoUrl;
-		}
+			return new ModelAndView("editarEvento");
 
-		Evento eventoValidado = requisicao.toEvento();
-		Optional<Evento> evento6 = er.findById(codigo);
-		if (evento6.isPresent()) {
-			Evento storeEvent = evento6.get();
-			storeEvent.setNome(eventoValidado.getNome());
-			storeEvent.setLocal(eventoValidado.getLocal());
-			storeEvent.setData(eventoValidado.getData());
-			storeEvent.setHorario(eventoValidado.getHorario());
-			er.save(storeEvent);
-		}
+		} else {
+			Optional<Evento> opt = er.findById(codigo);
+			if (opt.isPresent()) {
+				Evento evento6 = opt.get();
+				evento6.setNome(requisicao.getNome());
+				evento6.setLocal(requisicao.getLocal());
+				evento6.setData(requisicao.getData());
+				evento6.setHorario(requisicao.getHorario());
+				er.save(evento6);
 
-		attributes.addFlashAttribute("mensagem", "Evento atualizado com sucesso!");
-		return "redirect:/eventos/editar-evento/" + codigoUrl;
+				// TO-DO: confirmação com alert box de HTML, JS ou Modal (Bootstrap)
+				return new ModelAndView("redirect:/eventos");
+			}
+			return null;
+		}
 	}
 }
