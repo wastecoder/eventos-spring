@@ -97,7 +97,7 @@ public class EventoController {
 	public ModelAndView editarEvento(@PathVariable("codigo") Long codigo){
 		Evento evento5 = er.findByCodigo(codigo);
 		ModelAndView mv = new ModelAndView("editarEvento");
-		mv.addObject("evento", evento5);
+		mv.addObject("eventoDto", evento5);
 		return mv;
 	}
 
