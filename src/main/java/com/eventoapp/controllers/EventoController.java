@@ -4,6 +4,7 @@ import javax.validation.Valid;
 
 import com.eventoapp.dtos.EventoDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -77,20 +78,34 @@ public class EventoController {
 	
 	@GetMapping("/deletar-evento/{codigo}")
 	public String deletarEvento(@PathVariable("codigo") long codigo) {
-		Evento event4 = er.findByCodigo(codigo);
-		er.delete(event4);
+		try {
+			er.deleteById(codigo);
+			// Mensagem: evento deletado [+ codigo +] com sucesso
+
+		} catch (EmptyResultDataAccessException error) {
+			// Mensagem: evento [+ codigo +] não encontrado
+			System.out.println("DELETE ERROR: " + error);
+		}
 		return "redirect:/eventos";
 	}
 	
 	@GetMapping("/deletar-convidado/{rg}")
 	public String deletarConvidado(@PathVariable("rg") String rg) {
-		Convidado convidado = cr.findByRg(rg);
-		cr.delete(convidado);
-		
-		Evento evento = convidado.getEvento();
-		long codigo = evento.getCodigo();
-		String codigoEvento = Long.toString(codigo);
-		return "redirect:/eventos/detalhes/" + codigoEvento;
+		try {
+			Convidado convidado = cr.findByRg(rg);
+			Evento evento = convidado.getEvento();
+			long codigo = evento.getCodigo();
+			String codigoEvento = Long.toString(codigo);
+
+			cr.deleteById(rg);
+			// Mensagem: convidado deletado com sucesso
+			return "redirect:/eventos/detalhes/" + codigoEvento;
+
+		} catch (NullPointerException error) {
+			// Mensagem: convidado não encontrado
+			System.out.println("DELETE ERROR: " + error);
+			return "redirect:/eventos";
+		}
 	}
 
 	@GetMapping("/editar-evento/{codigo}")
