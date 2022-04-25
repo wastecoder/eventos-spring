@@ -3,6 +3,7 @@ package com.eventoapp.controllers;
 import javax.validation.Valid;
 
 import com.eventoapp.dtos.EventoDto;
+import jdk.jfr.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Controller;
@@ -52,27 +53,41 @@ public class EventoController {
 
 	@GetMapping("/detalhes/{codigo}")
 	public ModelAndView detalhesEvento(@PathVariable("codigo") long codigo) {
-		Evento event2 = er.findByCodigo(codigo);
-		ModelAndView mv = new ModelAndView("detalhesEvento");
-		mv.addObject("evento", event2);
-		
-		Iterable<Convidado> convidados1 = cr.findByEvento(event2);
-		mv.addObject("convidados", convidados1);
-		
-		return mv;
+		Optional<Evento> opt = er.findById(codigo);
+
+		if (opt.isPresent()) {
+			Evento event2 = opt.get();
+			ModelAndView mv = new ModelAndView("detalhesEvento");
+			mv.addObject("evento", event2);
+
+			Iterable<Convidado> convidados1 = cr.findByEvento(event2);
+			mv.addObject("convidados", convidados1);
+
+			return mv;
+
+		} else {
+			// Mensagem: SHOW ERROR: evento [+ codigo +] não encontrado
+			return new ModelAndView("redirect:/eventos");
+		}
+
 	}
 	
 	@PostMapping("/detalhes/{codigo}")
 	public String detalhesEventoPost(@PathVariable("codigo") long codigo, @Valid Convidado convidado, BindingResult result, RedirectAttributes attributes) {
-		if(result.hasErrors()) {
+		if (result.hasErrors()) {
+			// Mensagem: formulário inválido, campos restaurados
 			attributes.addFlashAttribute("mensagem", "Campos inválidos!");
-			return "redirect:/eventos/detalhes/{codigo}";
+
+		} else {
+			Optional<Evento> opt = er.findById(codigo);
+			if (opt.isPresent()) {
+				Evento event3 = opt.get();
+				convidado.setEvento(event3);
+				cr.save(convidado);
+				// Mensagem: convidado cadastrado com sucesso
+				attributes.addFlashAttribute("mensagem", "Convidado adicionado com sucesso!");
+			}
 		}
-		
-		Evento event3 = er.findByCodigo(codigo);
-		convidado.setEvento(event3);
-		cr.save(convidado);
-		attributes.addFlashAttribute("mensagem", "Convidado adicionado com sucesso!");
 		return "redirect:/eventos/detalhes/{codigo}";
 	}
 	
@@ -110,10 +125,11 @@ public class EventoController {
 
 	@GetMapping("/editar-evento/{codigo}")
 	public ModelAndView editarEvento(@PathVariable("codigo") Long codigo){
-		Optional<Evento> evento5 = er.findById(codigo);
-		if (evento5.isPresent()) {
+		Optional<Evento> opt = er.findById(codigo);
+		if (opt.isPresent()) {
+			Evento event3 = opt.get();
 			ModelAndView mv = new ModelAndView("editarEvento");
-			mv.addObject("eventoDto", evento5);
+			mv.addObject("eventoDto", event3);
 			return mv;
 
 		}else {
