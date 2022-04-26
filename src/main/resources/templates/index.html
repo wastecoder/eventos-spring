@@ -7,36 +7,33 @@
     <header th:replace="fragments/navbar :: index"></header>
 
     <main>
-        <table class="table table-dark table-bordered table-hover">
+        <table class="table table-dark table-bordered table-hover table-responsive-lg">
             <caption>Lista de eventos disponíveis</caption>
             <thead>
                 <tr>
-                    <th width="40%">Nome</th>
-                    <th width="30%">Local</th>
-                    <th width="12%">Data</th>
-                    <th width="8%">Horário</th>
-                    <th width="10%">Ações</th>
+                    <th scope="col">Nome</th>
+                    <th scope="col">Local</th>
+                    <th scope="col">Data</th>
+                    <th scope="col">Horário</th>
+                    <th scope="col">Ações</th>
                 </tr>
             </thead>
             <tbody>
                 <tr th:each="evento : ${eventos}">
-                    <td th:text="${evento.nome}"></td>
-                    <td th:text="${evento.local}"></td>
-                    <td th:text="${evento.data}"></td>
-                    <td th:text="${evento.horario}"></td>
-                    <td>
-                        <button class="btn-icons">
-                            <a th:href="${(#mvc.url('EC#detalhesEvento').arg(0, evento.codigo)).build()}">
-                                <i class="material-icons text-success">visibility</i></a>
-                        </button>
-                        <button class="btn-icons">
-                            <a th:href="${(#mvc.url('EC#editarEvento').arg(0, evento.codigo)).build()}"><i class="material-icons text-primary">edit</i></a>
-                        </button>
-                        <button class="btn-icons">
-                            <a th:attr="onclick=|deleteEvent('${evento.codigo}', '${evento.nome}')|">
-                                <i class="material-icons text-danger">delete</i>
-                            </a>
-                        </button>
+                    <td class="col-xl-5 col-lg-4" th:text="${evento.nome}"></td>
+                    <td class="col-xl-4 col-lg-3" th:text="${evento.local}"></td>
+                    <td class="col-xl-1 col-lg-2" th:text="${evento.data}"></td>
+                    <td class="col-xl-1 col-lg-1" th:text="${evento.horario}"></td>
+                    <td class="col-xl-1 col-lg-2">
+                        <a th:href="${(#mvc.url('EC#detalhesEvento').arg(0, evento.codigo)).build()}">
+                            <i class="fa-solid fa-eye text-success"></i>
+                        </a>
+                        <a th:href="${(#mvc.url('EC#editarEvento').arg(0, evento.codigo)).build()}">
+                            <i class="fa-solid fa-pen text-primary"></i>
+                        </a>
+                        <a th:attr="onclick=|deleteEvent('${evento.codigo}', '${evento.nome}')|">
+                            <i class="fa-solid fa-trash text-danger"></i>
+                        </a>
                     </td>
                 </tr>
             </tbody>
