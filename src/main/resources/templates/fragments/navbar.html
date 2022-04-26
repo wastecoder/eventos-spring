@@ -1,8 +1,11 @@
 <header th:fragment="index">
     <nav class="navbar navbar-dark bg-primary justify-content-between">
-        <a class="navbar-brand"><i class="fas fa-solid fa-cloud-moon"></i>Lista de Eventos</a>
+        <a class="navbar-brand">
+            <i class="fa-solid fa-bars"></i>
+            Lista de Eventos
+        </a>
         <a href="/eventos/cadastrar-evento" class="btn btn-warning text-light navbar-btn">
-            <i class="fas fa-solid fa-folder-plus fa-lg"></i>
+            <i class="fa-solid fa-pen-to-square"></i>
             Cadastrar Eventos
         </a>
     </nav>
@@ -10,20 +13,35 @@
 
 <header th:fragment="createEvent">
     <nav class="navbar navbar-dark bg-primary justify-content-between">
-        <a class="navbar-brand"><i class="fas fa-solid fa-folder-plus"></i>Cadastro de Eventos</a>
-        <a href="/eventos" class="btn btn-warning text-light navbar-btn">
-            <i class="fas fa-solid fa-house-user fa-lg"></i>
-            Lista de Eventos
+        <a class="navbar-brand">
+            <i class="fa-solid fa-pen-to-square"></i>
+            Cadastro de Eventos
         </a>
+        <a th:replace="fragments/navbar :: homePage"></a>
+    </nav>
+</header>
+
+<header th:fragment="updateEvent">
+    <nav class="navbar navbar-dark bg-primary justify-content-between">
+        <a class="navbar-brand">
+            <i class="fa-solid fa-arrow-rotate-left"></i>
+            Atualização de Eventos
+        </a>
+        <a th:replace="fragments/navbar :: homePage"></a>
     </nav>
 </header>
 
 <header th:fragment="viewEvent">
     <nav class="navbar navbar-dark bg-primary justify-content-between">
-        <a class="navbar-brand"><i class="fas fa-solid fa-box-open"></i>Detalhes do Eventos</a>
-        <a href="/eventos" class="btn btn-warning text-light navbar-btn">
-            <i class="fas fa-solid fa-house-user fa-lg"></i>
-            Lista de Eventos
+        <a class="navbar-brand">
+            <i class="fa-solid fa-file-lines"></i>
+            Detalhes de Eventos
         </a>
+        <a th:replace="fragments/navbar :: homePage"></a>
     </nav>
 </header>
+
+<a th:fragment="homePage" href="/eventos" class="btn btn-warning text-light navbar-btn">
+    <i class="fa-solid fa-house"></i>
+    Lista de Eventos
+</a>

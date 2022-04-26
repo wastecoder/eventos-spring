@@ -3,6 +3,12 @@
 
 <head th:replace="fragments/head :: general('Cadastro de Eventos')"></head>
 
-<body th:replace="fragments/forms :: event('Cadastrar', 'cadastrar-evento')"></body>
+<body>
+    <header th:replace="fragments/navbar :: createEvent"></header>
+
+    <main th:replace="fragments/forms :: event('Cadastrar', 'cadastrar-evento')"></main>
+
+    <div th:replace="fragments/bottom"></div>
+</body>
 
 </html>

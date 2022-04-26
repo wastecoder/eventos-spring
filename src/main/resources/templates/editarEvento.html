@@ -3,6 +3,12 @@
 
 <head th:replace="fragments/head :: general('Atualização de Evento')"></head>
 
-<body th:replace="fragments/forms :: event('Atualizar', ${codigo})"></body>
+<body>
+    <header th:replace="fragments/navbar :: updateEvent"></header>
+
+    <main th:replace="fragments/forms :: event('Atualizar', ${codigo})"></main>
+
+    <div th:replace="fragments/bottom"></div>
+</body>
 
 </html>
