@@ -39,12 +39,12 @@
 
                     <div class="form-floating col-md-12">
                         <input type="text" id="fnomec" name="nomeConvidado" class="form-control" placeholder=" "
-                            required  minlength="3" maxlength="60">
+                            required minlength="3" maxlength="60">
                         <label for="fnomec">Nome completo</label>
                     </div>
 
                     <div class="form-floating col-md-12">
-                        <input type="text" id="flocal" name="rg" class="form-control" placeholder=" " required  minlength="9" maxlength="12">
+                        <input type="text" id="flocal" name="rg" class="form-control" placeholder=" " required minlength="9" maxlength="12">
                         <label for="flocal">RG (com símbolos)</label>
                     </div>
 
@@ -71,18 +71,17 @@
                         <td th:text="${convidado.nomeConvidado}"></td>
                         <td th:text="${convidado.rg}"></td>
                         <td>
-                            <button class="btn-icons">
-                                <a th:attr="onclick=|deleteGuest('${convidado.rg}',
-                             '${convidado.nomeConvidado}')|">
+                            <a th:attr="onclick=|deleteGuest('${convidado.rg}', '${convidado.nomeConvidado}')|" type="button" data-bs-toggle="modal" data-bs-target="#modalId">
                                     <i class="fas fa-solid fa-trash text-danger"></i>
-                                </a>
-                            </button>
+                            </a>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </main>
+
+    <div th:replace="fragments/modal :: delete('convidado')"></div>
 
     <div th:replace="fragments/bottom"></div>
 </body>

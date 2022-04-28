@@ -1,12 +1,9 @@
-function deleteEvent(id, name) {
-    document.getElementById('modalName').innerHTML = name;
-    document.getElementById('modalConfirm').setAttribute("href", "/eventos/deletar-evento/" + id);
+function deleteEvent(eventId, eventName) {
+    document.getElementById('modalName').innerHTML = eventName;
+    document.getElementById('modalConfirm').setAttribute("href", "/eventos/deletar-evento/" + eventId);
 }
 
 function deleteGuest(guestId, guestName) {
-    option = confirm("Deseja excluir o convidado [" + guestName + "]?");
-    if (option) {
-        alert("Convidado excluído com sucesso!");
-        window.location.replace("/eventos/deletar-convidado/" + guestId);
-    }
+    document.getElementById('modalName').innerHTML = guestName;
+    document.getElementById('modalConfirm').setAttribute("href", "/eventos/deletar-convidado/" + guestId);
 }

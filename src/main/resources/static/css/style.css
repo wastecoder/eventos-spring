@@ -135,6 +135,7 @@ footer .container-fluid{
     color: #222;
 }
 
+
     /* Bootstrap Modal */
 .modal .modal-dialog{
     font-family: 'Varela Round', sans-serif;
@@ -180,6 +181,10 @@ footer .container-fluid{
 .modal-body p {
     font-size: 17px;
     margin-bottom: 3px;
+}
+
+.modal-body #modalName {
+    overflow-wrap: break-word;
 }
 
 .modal-body #warning {
