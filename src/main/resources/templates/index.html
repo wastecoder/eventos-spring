@@ -31,7 +31,7 @@
                         <a th:href="${(#mvc.url('EC#editarEvento').arg(0, evento.codigo)).build()}">
                             <i class="fa-solid fa-pen text-primary"></i>
                         </a>
-                        <a th:attr="onclick=|deleteEvent('${evento.codigo}', '${evento.nome}')|">
+                        <a th:attr="onclick=|deleteEvent('${evento.codigo}', '${evento.nome}')|" type="button" data-bs-toggle="modal" data-bs-target="#modalId">
                             <i class="fa-solid fa-trash text-danger"></i>
                         </a>
                     </td>
@@ -39,6 +39,8 @@
             </tbody>
         </table>
     </main>
+
+    <div th:replace="fragments/modal :: event"></div>
 
     <div th:replace="fragments/bottom"></div>
 </body>

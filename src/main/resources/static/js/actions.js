@@ -1,11 +1,6 @@
-// shorturl.at/hqBKX
-
 function deleteEvent(id, name) {
-    option = confirm("Deseja excluir o evento [" + name + "]?");
-    if (option){
-        alert("Evento excluído com sucesso!");
-        window.location.replace("/eventos/deletar-evento/" + id);
-    }
+    document.getElementById('modalName').innerHTML = name;
+    document.getElementById('modalConfirm').setAttribute("href", "/eventos/deletar-evento/" + id);
 }
 
 function deleteGuest(guestId, guestName) {
