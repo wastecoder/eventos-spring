@@ -1,0 +1,6 @@
+<div th:fragment="notification" class="alert-modal" role="alert" th:if="${not #strings.isEmpty(mensagem)}">
+    <div class="popup" th:classappend="${error} ? 'error-alert' : 'success-alert'">
+        <p th:text="${mensagem}">mensagem</p>
+        <a class="close">&times;</a>
+    </div>
+</div>

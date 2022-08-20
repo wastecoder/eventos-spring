@@ -209,3 +209,62 @@ footer .container-fluid{
     background-color: #FFF;
     color: #D50000;
 }
+
+
+    /* Alert Notification */
+.popup p {
+    font-family: sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.alert-modal{
+    position: fixed;
+    bottom: 10px;
+    right: 30px;
+    z-index: 102;
+}
+
+.popup {
+    position: relative;
+    width: 300px;
+    height: 60px;
+    margin: 20px auto;
+    padding: 22px 15px;
+    border-radius: 5px;
+}
+
+.close {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    opacity: 0.5;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 50%;
+    right: 15px;
+    top: 15px;
+    text-align: center;
+    font-size: 1.6em;
+    line-height: 100%;
+    cursor: pointer;
+}
+
+.success-alert {
+    background-color: #a8f0c6;
+    border-left: 5px solid #178344;
+}
+.success-alert .close {
+    border-color: #178344;
+    color: #178344;
+}
+
+.error-alert {
+    background-color: #f7a7a3;
+    border-left: 5px solid #8F130C;
+    box-shadow: 0 0 15px 5px #8F130C80;
+}
+.error-alert .close {
+    border-color: #8F130C;
+    color: #8f130c;
+}

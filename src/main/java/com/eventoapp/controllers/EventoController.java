@@ -42,17 +42,19 @@ public class EventoController {
 	}
 
 	@PostMapping("/cadastrar-evento")
-	public ModelAndView form(@Valid EventoDto requisicao, BindingResult result) {
+	public ModelAndView form(@Valid EventoDto requisicao, BindingResult result, RedirectAttributes attributes) {
 		Evento evento = requisicao.toEvento();
 		if(result.hasErrors()) {
 			return new ModelAndView("formEvento"); //Retorna e exibe o que já foi preenchido
 		}
 		er.save(evento);
+		attributes.addFlashAttribute("mensagem", "Evento cadastrado com sucesso!");
+		attributes.addFlashAttribute("error", false);
 		return new ModelAndView("redirect:/eventos");
 	}
 
 	@GetMapping("/detalhes/{codigo}")
-	public ModelAndView detalhesEvento(@PathVariable("codigo") long codigo) {
+	public ModelAndView detalhesEvento(@PathVariable("codigo") long codigo, RedirectAttributes attributes) {
 		Optional<Evento> opt = er.findById(codigo);
 
 		if (opt.isPresent()) {
@@ -66,7 +68,8 @@ public class EventoController {
 			return mv;
 
 		} else {
-			// Mensagem: SHOW ERROR: evento [+ codigo +] não encontrado
+			attributes.addFlashAttribute("mensagem", "Evento [" + codigo + "] não encontrado!");
+			attributes.addFlashAttribute("error", true);
 			return new ModelAndView("redirect:/eventos");
 		}
 
@@ -76,7 +79,9 @@ public class EventoController {
 	public String detalhesEventoPost(@PathVariable("codigo") long codigo, @Valid Convidado convidado, BindingResult result, RedirectAttributes attributes) {
 		if (result.hasErrors()) {
 			// Mensagem: formulário inválido, campos restaurados
+			// Conflito: parâmetro igual & sem fragment da notificação
 			attributes.addFlashAttribute("mensagem", "Campos inválidos!");
+			//attributes.addFlashAttribute("error", true);
 
 		} else {
 			Optional<Evento> opt = er.findById(codigo);
@@ -84,28 +89,29 @@ public class EventoController {
 				Evento event3 = opt.get();
 				convidado.setEvento(event3);
 				cr.save(convidado);
-				// Mensagem: convidado cadastrado com sucesso
 				attributes.addFlashAttribute("mensagem", "Convidado adicionado com sucesso!");
+				//attributes.addFlashAttribute("error", false);
 			}
 		}
 		return "redirect:/eventos/detalhes/{codigo}";
 	}
 	
 	@GetMapping("/deletar-evento/{codigo}")
-	public String deletarEvento(@PathVariable("codigo") long codigo) {
+	public String deletarEvento(@PathVariable("codigo") long codigo, RedirectAttributes attributes) {
 		try {
 			er.deleteById(codigo);
-			// Mensagem: evento deletado [+ codigo +] com sucesso
+			attributes.addFlashAttribute("mensagem", "Evento [" + codigo + "] deletado com sucesso!");
+			attributes.addFlashAttribute("error", false);
 
 		} catch (EmptyResultDataAccessException error) {
-			// Mensagem: evento [+ codigo +] não encontrado
-			System.out.println("DELETE ERROR: " + error);
+			attributes.addFlashAttribute("mensagem", "Evento [" + codigo + "] não encontrado!");
+			attributes.addFlashAttribute("error", true);
 		}
 		return "redirect:/eventos";
 	}
 	
 	@GetMapping("/deletar-convidado/{rg}")
-	public String deletarConvidado(@PathVariable("rg") String rg) {
+	public String deletarConvidado(@PathVariable("rg") String rg, RedirectAttributes attributes) {
 		try {
 			Convidado convidado = cr.findByRg(rg);
 			Evento evento = convidado.getEvento();
@@ -113,12 +119,14 @@ public class EventoController {
 			String codigoEvento = Long.toString(codigo);
 
 			cr.deleteById(rg);
-			// Mensagem: convidado deletado com sucesso
+			// Conflito: mesma coisa do método detalhesEventoPost
+			attributes.addFlashAttribute("mensagem", "Convidado deletado com sucesso!");
+			//attributes.addFlashAttribute("error", false); // Esse arquivo ainda não tem notificação
 			return "redirect:/eventos/detalhes/" + codigoEvento;
 
 		} catch (NullPointerException error) {
-			// Mensagem: convidado não encontrado
-			System.out.println("DELETE ERROR: " + error);
+			attributes.addFlashAttribute("mensagem", "Convidado não encontrado!");
+			attributes.addFlashAttribute("error", true);
 			return "redirect:/eventos";
 		}
 	}
@@ -138,7 +146,7 @@ public class EventoController {
 	}
 
 	@PostMapping("/editar-evento/{codigo}")
-	public ModelAndView salvarEdicaoEvento(@PathVariable("codigo") Long codigo, @Valid EventoDto requisicao, BindingResult result) {
+	public ModelAndView salvarEdicaoEvento(@PathVariable("codigo") Long codigo, @Valid EventoDto requisicao, BindingResult result, RedirectAttributes attributes) {
 		if(result.hasErrors()) {
 			return new ModelAndView("editarEvento");
 
@@ -152,7 +160,8 @@ public class EventoController {
 				evento6.setHorario(requisicao.getHorario());
 				er.save(evento6);
 
-				// TO-DO: confirmação com alert box de HTML, JS ou Modal (Bootstrap)
+				attributes.addFlashAttribute("mensagem", "Evento [" + codigo + "] atualizado com sucesso!");
+				attributes.addFlashAttribute("error", false);
 				return new ModelAndView("redirect:/eventos");
 			}
 			return null;
