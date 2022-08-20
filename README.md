@@ -21,7 +21,7 @@ Após clonar e importar o repositório, basta configurar o banco de dados:
 - [x] Usa DTO para prevenir Web Parameter Tampering
 - [x] Janela de confirmação para deletar objetos
 - [x] Convidados são removidos automaticamente ao deletar seu evento
-- [ ] Pop up de notificação para confirmação e erro das ações de CRUD
+- [x] Pop up de notificação para confirmação e erro das ações de CRUD
 - [ ] Camada service como intermediário entre controlador e banco de dados
 - [ ] Paginação e ordenação
 - [ ] Lombok nas entidades
