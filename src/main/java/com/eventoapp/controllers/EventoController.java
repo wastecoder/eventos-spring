@@ -3,7 +3,7 @@ package com.eventoapp.controllers;
 import javax.validation.Valid;
 
 import com.eventoapp.dtos.EventoDto;
-import jdk.jfr.Event;
+import com.eventoapp.services.EventoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Controller;
@@ -22,8 +22,12 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/eventos")
 public class EventoController {
+	private final EventoService eventoService;
+
 	@Autowired
-	private EventoRepository er;
+	public EventoController(EventoService eventoService) {
+		this.eventoService = eventoService;
+	}
 
 	@Autowired
 	private ConvidadoRepository cr;
@@ -31,7 +35,7 @@ public class EventoController {
 	@GetMapping
 	public ModelAndView listaEventos() {
 		ModelAndView mv = new ModelAndView("index");
-		Iterable<Evento> event1 = er.findAll();
+		Iterable<Evento> event1 = eventoService.todosEventos();
 		mv.addObject("eventos", event1);
 		return mv;
 	}
@@ -47,32 +51,27 @@ public class EventoController {
 		if(result.hasErrors()) {
 			return new ModelAndView("formEvento"); //Retorna e exibe o que já foi preenchido
 		}
-		er.save(evento);
-		attributes.addFlashAttribute("mensagem", "Evento cadastrado com sucesso!");
-		attributes.addFlashAttribute("error", false);
+		eventoService.salvarEvento(evento);
+		eventoService.mensagemSucesso(attributes, "Evento cadastrado com sucesso!");
 		return new ModelAndView("redirect:/eventos");
 	}
 
 	@GetMapping("/detalhes/{codigo}")
 	public ModelAndView detalhesEvento(@PathVariable("codigo") long codigo, RedirectAttributes attributes) {
-		Optional<Evento> opt = er.findById(codigo);
+		Evento evento = eventoService.eventoId(codigo);
 
-		if (opt.isPresent()) {
-			Evento event2 = opt.get();
+		if (evento != null) {
 			ModelAndView mv = new ModelAndView("detalhesEvento");
-			mv.addObject("evento", event2);
+			mv.addObject("evento", evento);
 
-			Iterable<Convidado> convidados1 = cr.findByEvento(event2);
+			Iterable<Convidado> convidados1 = cr.findByEvento(evento);
 			mv.addObject("convidados", convidados1);
 
 			return mv;
-
 		} else {
-			attributes.addFlashAttribute("mensagem", "Evento [" + codigo + "] não encontrado!");
-			attributes.addFlashAttribute("error", true);
+			eventoService.mensagemErro(attributes, "READ: Evento [" + codigo + "] não encontrado!");
 			return new ModelAndView("redirect:/eventos");
 		}
-
 	}
 	
 	@PostMapping("/detalhes/{codigo}")
@@ -80,17 +79,15 @@ public class EventoController {
 		if (result.hasErrors()) {
 			// Mensagem: formulário inválido, campos restaurados
 			// Conflito: parâmetro igual & sem fragment da notificação
-			attributes.addFlashAttribute("mensagem", "Campos inválidos!");
-			//attributes.addFlashAttribute("error", true);
+			// Colocar essas mensagens no service de convidado
+			eventoService.mensagemErro(attributes, "Campos inválidos!");
 
 		} else {
-			Optional<Evento> opt = er.findById(codigo);
-			if (opt.isPresent()) {
-				Evento event3 = opt.get();
-				convidado.setEvento(event3);
+			Evento evento = eventoService.eventoId(codigo);
+			if (evento != null) {
+				convidado.setEvento(evento);
 				cr.save(convidado);
-				attributes.addFlashAttribute("mensagem", "Convidado adicionado com sucesso!");
-				//attributes.addFlashAttribute("error", false);
+				eventoService.mensagemSucesso(attributes, "Convidado adicionado com sucesso!");
 			}
 		}
 		return "redirect:/eventos/detalhes/{codigo}";
@@ -98,14 +95,10 @@ public class EventoController {
 	
 	@GetMapping("/deletar-evento/{codigo}")
 	public String deletarEvento(@PathVariable("codigo") long codigo, RedirectAttributes attributes) {
-		try {
-			er.deleteById(codigo);
-			attributes.addFlashAttribute("mensagem", "Evento [" + codigo + "] deletado com sucesso!");
-			attributes.addFlashAttribute("error", false);
-
-		} catch (EmptyResultDataAccessException error) {
-			attributes.addFlashAttribute("mensagem", "Evento [" + codigo + "] não encontrado!");
-			attributes.addFlashAttribute("error", true);
+		if (eventoService.deletarEvento(codigo)) {
+			eventoService.mensagemSucesso(attributes, "Evento [" + codigo + "] deletado com sucesso!");
+		} else {
+			eventoService.mensagemErro(attributes, "DELETE: Evento [" + codigo + "] não encontrado!");
 		}
 		return "redirect:/eventos";
 	}
@@ -120,27 +113,24 @@ public class EventoController {
 
 			cr.deleteById(rg);
 			// Conflito: mesma coisa do método detalhesEventoPost
-			attributes.addFlashAttribute("mensagem", "Convidado deletado com sucesso!");
-			//attributes.addFlashAttribute("error", false); // Esse arquivo ainda não tem notificação
+			eventoService.mensagemSucesso(attributes, "Convidado deletado com sucesso!");
 			return "redirect:/eventos/detalhes/" + codigoEvento;
 
 		} catch (NullPointerException error) {
-			attributes.addFlashAttribute("mensagem", "Convidado não encontrado!");
-			attributes.addFlashAttribute("error", true);
+			eventoService.mensagemErro(attributes, "Convidado não encontrado!");
 			return "redirect:/eventos";
 		}
 	}
 
 	@GetMapping("/editar-evento/{codigo}")
-	public ModelAndView editarEvento(@PathVariable("codigo") Long codigo){
-		Optional<Evento> opt = er.findById(codigo);
-		if (opt.isPresent()) {
-			Evento event3 = opt.get();
+	public ModelAndView editarEvento(@PathVariable("codigo") Long codigo, RedirectAttributes attributes){
+		Evento evento = eventoService.eventoId(codigo);
+		if (evento != null) {
 			ModelAndView mv = new ModelAndView("editarEvento");
-			mv.addObject("eventoDto", event3);
+			mv.addObject("eventoDto", evento);
 			return mv;
-
 		}else {
+			eventoService.mensagemErro(attributes,"UPDATE: Evento [" + codigo + "] não encontrado!");
 			return new ModelAndView("redirect:/eventos");
 		}
 	}
@@ -151,17 +141,15 @@ public class EventoController {
 			return new ModelAndView("editarEvento");
 
 		} else {
-			Optional<Evento> opt = er.findById(codigo);
-			if (opt.isPresent()) {
-				Evento evento6 = opt.get();
-				evento6.setNome(requisicao.getNome());
-				evento6.setLocal(requisicao.getLocal());
-				evento6.setData(requisicao.getData());
-				evento6.setHorario(requisicao.getHorario());
-				er.save(evento6);
+			Evento evento = eventoService.eventoId(codigo);
+			if (evento != null) {
+				evento.setNome(requisicao.getNome());
+				evento.setLocal(requisicao.getLocal());
+				evento.setData(requisicao.getData());
+				evento.setHorario(requisicao.getHorario());
+				eventoService.salvarEvento(evento);
 
-				attributes.addFlashAttribute("mensagem", "Evento [" + codigo + "] atualizado com sucesso!");
-				attributes.addFlashAttribute("error", false);
+				eventoService.mensagemSucesso(attributes, "Evento [" + codigo + "] atualizado com sucesso!");
 				return new ModelAndView("redirect:/eventos");
 			}
 			return null;

@@ -253,6 +253,7 @@ footer .container-fluid{
 .success-alert {
     background-color: #a8f0c6;
     border-left: 5px solid #178344;
+    box-shadow: 0 0 15px 5px #17834480;
 }
 .success-alert .close {
     border-color: #178344;
@@ -266,5 +267,5 @@ footer .container-fluid{
 }
 .error-alert .close {
     border-color: #8F130C;
-    color: #8f130c;
+    color: #8F130C;
 }
