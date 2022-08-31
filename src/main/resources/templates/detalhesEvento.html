@@ -71,7 +71,7 @@
                         <td th:text="${convidado.nomeConvidado}"></td>
                         <td th:text="${convidado.rg}"></td>
                         <td>
-                            <a th:attr="onclick=|deleteGuest('${convidado.rg}', '${convidado.nomeConvidado}')|" type="button" data-bs-toggle="modal" data-bs-target="#modalId">
+                            <a th:attr="onclick=|deleteGuest('${convidado.id}', '${convidado.nomeConvidado}')|" type="button" data-bs-toggle="modal" data-bs-target="#modalId">
                                     <i class="fas fa-solid fa-trash text-danger"></i>
                             </a>
                         </td>

@@ -57,7 +57,7 @@ public class EventoController {
 	}
 
 	@GetMapping("/detalhes/{codigo}")
-	public ModelAndView detalhesEvento(@PathVariable("codigo") long codigo, RedirectAttributes attributes) {
+	public ModelAndView detalhesEvento(@PathVariable("codigo") Long codigo, RedirectAttributes attributes) {
 		Evento evento = eventoService.eventoId(codigo);
 
 		if (evento != null) {
@@ -75,7 +75,7 @@ public class EventoController {
 	}
 	
 	@PostMapping("/detalhes/{codigo}")
-	public String detalhesEventoPost(@PathVariable("codigo") long codigo, @Valid Convidado convidado, BindingResult result, RedirectAttributes attributes) {
+	public String detalhesEventoPost(@PathVariable("codigo") Long codigo, @Valid Convidado convidado, BindingResult result, RedirectAttributes attributes) {
 		if (result.hasErrors()) {
 			// Mensagem: formulário inválido, campos restaurados
 			// Conflito: parâmetro igual & sem fragment da notificação
@@ -94,7 +94,7 @@ public class EventoController {
 	}
 	
 	@GetMapping("/deletar-evento/{codigo}")
-	public String deletarEvento(@PathVariable("codigo") long codigo, RedirectAttributes attributes) {
+	public String deletarEvento(@PathVariable("codigo") Long codigo, RedirectAttributes attributes) {
 		if (eventoService.deletarEvento(codigo)) {
 			eventoService.mensagemSucesso(attributes, "Evento [" + codigo + "] deletado com sucesso!");
 		} else {
@@ -103,15 +103,15 @@ public class EventoController {
 		return "redirect:/eventos";
 	}
 	
-	@GetMapping("/deletar-convidado/{rg}")
-	public String deletarConvidado(@PathVariable("rg") String rg, RedirectAttributes attributes) {
+	@GetMapping("/deletar-convidado/{id}")
+	public String deletarConvidado(@PathVariable("id") Long id, RedirectAttributes attributes) {
 		try {
-			Convidado convidado = cr.findByRg(rg);
+			Convidado convidado = cr.getById(id);
 			Evento evento = convidado.getEvento();
 			long codigo = evento.getCodigo();
 			String codigoEvento = Long.toString(codigo);
 
-			cr.deleteById(rg);
+			cr.deleteById(id);
 			// Conflito: mesma coisa do método detalhesEventoPost
 			eventoService.mensagemSucesso(attributes, "Convidado deletado com sucesso!");
 			return "redirect:/eventos/detalhes/" + codigoEvento;

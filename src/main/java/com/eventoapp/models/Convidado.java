@@ -1,25 +1,17 @@
 package com.eventoapp.models;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "Convidado")
 public class Convidado {
 		//Atributos - colunas da tabela
 	@Id
-	@NotEmpty @NotBlank
-	@Size(min = 9, max = 12)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Long id;
+
 	@Column(nullable = false, length = 12)
 	private String rg;
-	@NotEmpty @NotBlank
-	@Size(min = 3, max = 60)
 	@Column(nullable = false, length = 60)
 	private String nomeConvidado;
 	
@@ -28,7 +20,11 @@ public class Convidado {
 	@ManyToOne
 	private Evento evento;
 	
-		//Métodos especiais	
+		//Métodos especiais
+	public Long getId() {
+		return id;
+	}
+
 	public String getRg() {
 		return rg;
 	}
@@ -48,7 +44,7 @@ public class Convidado {
 	public Evento getEvento() {
 		return evento;
 	}
-	
+
 	public void setEvento(Evento evento) {
 		this.evento = evento;
 	}

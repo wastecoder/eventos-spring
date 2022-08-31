@@ -1,7 +1,9 @@
 package com.eventoapp.models;
 
+import org.hibernate.validator.constraints.UniqueElements;
+
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -19,7 +21,7 @@ public class Evento implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	private long codigo;
+	private Long codigo;
 	
 		//Atributos - colunas da tabela
 	@Column(nullable = false, length = 60)
@@ -33,7 +35,7 @@ public class Evento implements Serializable{
 	
 		//Cardinalidade
 	@OneToMany(mappedBy = "evento", cascade = CascadeType.ALL)
-	private List<Convidado> convidados;
+	private Set<Convidado> convidados;
 	
 		//Métodos especiais
 	public long getCodigo() {
