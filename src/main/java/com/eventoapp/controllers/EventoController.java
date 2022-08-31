@@ -2,6 +2,7 @@ package com.eventoapp.controllers;
 
 import javax.validation.Valid;
 
+import com.eventoapp.dtos.ConvidadoDto;
 import com.eventoapp.dtos.EventoDto;
 import com.eventoapp.services.EventoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,7 +76,7 @@ public class EventoController {
 	}
 	
 	@PostMapping("/detalhes/{codigo}")
-	public String detalhesEventoPost(@PathVariable("codigo") Long codigo, @Valid Convidado convidado, BindingResult result, RedirectAttributes attributes) {
+	public String detalhesEventoPost(@PathVariable("codigo") Long codigo, @Valid ConvidadoDto convidadoValidado, BindingResult result, RedirectAttributes attributes) {
 		if (result.hasErrors()) {
 			// Mensagem: formulário inválido, campos restaurados
 			// Conflito: parâmetro igual & sem fragment da notificação
@@ -85,6 +86,7 @@ public class EventoController {
 		} else {
 			Evento evento = eventoService.eventoId(codigo);
 			if (evento != null) {
+				Convidado convidado = convidadoValidado.toConvidado();
 				convidado.setEvento(evento);
 				cr.save(convidado);
 				eventoService.mensagemSucesso(attributes, "Convidado adicionado com sucesso!");
