@@ -36,3 +36,26 @@
         </form>
     </div>
 </main>
+
+<div th:fragment="guest(formTitle, action)" class="central-form">
+    <form method="POST" class="form-body" th:object="${convidadoDto}" th:action="${action}">
+        <div class="row">
+            <h2 class="form-title" th:text="${formTitle}">Título</h2>
+
+            <div class="form-floating col-md-12">
+                <input type="text" class="form-control" placeholder=" " th:field="*{nomeConvidado}" th:errorclass="is-invalid" required maxlength="60">
+                <label>Nome completo</label>
+                <div class="invalid-feedback" th:errors="*{nomeConvidado}"></div>
+            </div>
+
+            <div class="form-floating col-md-12">
+                <input type="text" class="form-control" placeholder=" " th:field="*{rg}" th:errorclass="is-invalid" required maxlength="12">
+                <label>RG (com símbolos)</label>
+                <div class="invalid-feedback" th:errors="*{rg}"></div>
+            </div>
+
+            <button class="btn btn-primary btn-form" type="submit">
+                <i class="fas fa-solid fa-upload"></i>Adicionar</button>
+        </div>
+    </form>
+</div>

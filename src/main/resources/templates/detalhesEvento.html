@@ -31,28 +31,7 @@
             </table>
         </div>
 
-        <div class="central-form">
-            <form method="POST">
-                <div class="row">
-                    <h2 class="form-title">Cadastrar convidado</h2>
-                    <th:block th:include="fragments/formWarning"></th:block>
-
-                    <div class="form-floating col-md-12">
-                        <input type="text" id="fnomec" name="nomeConvidado" class="form-control" placeholder=" "
-                            required minlength="3" maxlength="60">
-                        <label for="fnomec">Nome completo</label>
-                    </div>
-
-                    <div class="form-floating col-md-12">
-                        <input type="text" id="flocal" name="rg" class="form-control" placeholder=" " required minlength="9" maxlength="12">
-                        <label for="flocal">RG (com símbolos)</label>
-                    </div>
-
-                    <button class="btn btn-primary btn-form" type="submit">
-                        <i class="fas fa-solid fa-upload"></i>Adicionar</button>
-                </div>
-            </form>
-        </div>
+        <div th:replace="fragments/forms :: guest('Cadastrar Convidado', ${evento.codigo})"></div>
 
         <div class="container" style="padding-top: 20px;">
             <h2 class="form-title">Lista de convidados</h2>

@@ -38,7 +38,7 @@ public class Evento implements Serializable{
 	private Set<Convidado> convidados;
 	
 		//Métodos especiais
-	public long getCodigo() {
+	public Long getCodigo() {
 		return codigo;
 	}
 

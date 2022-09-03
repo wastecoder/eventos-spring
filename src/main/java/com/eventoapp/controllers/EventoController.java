@@ -58,7 +58,7 @@ public class EventoController {
 	}
 
 	@GetMapping("/detalhes/{codigo}")
-	public ModelAndView detalhesEvento(@PathVariable("codigo") Long codigo, RedirectAttributes attributes) {
+	public ModelAndView detalhesEvento(@PathVariable("codigo") Long codigo, RedirectAttributes attributes, ConvidadoDto convidadoDto) {
 		Evento evento = eventoService.eventoId(codigo);
 
 		if (evento != null) {
@@ -76,23 +76,27 @@ public class EventoController {
 	}
 	
 	@PostMapping("/detalhes/{codigo}")
-	public String detalhesEventoPost(@PathVariable("codigo") Long codigo, @Valid ConvidadoDto convidadoValidado, BindingResult result, RedirectAttributes attributes) {
-		if (result.hasErrors()) {
-			// Mensagem: formulário inválido, campos restaurados
-			// Conflito: parâmetro igual & sem fragment da notificação
-			// Colocar essas mensagens no service de convidado
-			eventoService.mensagemErro(attributes, "Campos inválidos!");
+	public ModelAndView detalhesEventoPost(@PathVariable("codigo") Long codigo, @Valid ConvidadoDto convidadoValidado, BindingResult result, RedirectAttributes attributes) {
+		Evento evento = eventoService.eventoId(codigo);
 
-		} else {
-			Evento evento = eventoService.eventoId(codigo);
-			if (evento != null) {
+		if (evento != null) {
+			if (result.hasErrors()) {
+				ModelAndView mv = new ModelAndView("detalhesEvento");
+				mv.addObject("evento", evento);
+
+				Iterable<Convidado> convidados = cr.findByEvento(evento);
+				mv.addObject("convidados", convidados);
+
+				return mv;
+
+			} else {
 				Convidado convidado = convidadoValidado.toConvidado();
 				convidado.setEvento(evento);
 				cr.save(convidado);
 				eventoService.mensagemSucesso(attributes, "Convidado adicionado com sucesso!");
 			}
 		}
-		return "redirect:/eventos/detalhes/{codigo}";
+		return new ModelAndView("redirect:/eventos/detalhes/{codigo}");
 	}
 	
 	@GetMapping("/deletar-evento/{codigo}")

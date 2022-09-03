@@ -136,6 +136,12 @@ footer .container-fluid{
 }
 
 
+    /* Form Alert */
+.invalid-feedback {
+    margin-bottom: -25px;
+}
+
+
     /* Bootstrap Modal */
 .modal .modal-dialog{
     font-family: 'Varela Round', sans-serif;
