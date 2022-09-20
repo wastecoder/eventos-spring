@@ -6,7 +6,6 @@ import com.eventoapp.dtos.ConvidadoDto;
 import com.eventoapp.dtos.EventoDto;
 import com.eventoapp.services.EventoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -16,9 +15,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.eventoapp.models.Convidado;
 import com.eventoapp.models.Evento;
 import com.eventoapp.repository.ConvidadoRepository;
-import com.eventoapp.repository.EventoRepository;
-
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/eventos")
@@ -42,12 +38,12 @@ public class EventoController {
 	}
 
 	@GetMapping("/cadastrar-evento")
-	public String form(EventoDto requisicao) { //Para não dar erro no th:object
+	public String cadastrarEvento(EventoDto requisicao) { //Para não dar erro no th:object
 		return "formEvento";
 	}
 
 	@PostMapping("/cadastrar-evento")
-	public ModelAndView form(@Valid EventoDto requisicao, BindingResult result, RedirectAttributes attributes) {
+	public ModelAndView salvarCadastroEvento(@Valid EventoDto requisicao, BindingResult result, RedirectAttributes attributes) {
 		Evento evento = requisicao.toEvento();
 		if(result.hasErrors()) {
 			return new ModelAndView("formEvento"); //Retorna e exibe o que já foi preenchido
@@ -75,30 +71,6 @@ public class EventoController {
 		}
 	}
 	
-	@PostMapping("/detalhes/{codigo}")
-	public ModelAndView detalhesEventoPost(@PathVariable("codigo") Long codigo, @Valid ConvidadoDto convidadoValidado, BindingResult result, RedirectAttributes attributes) {
-		Evento evento = eventoService.eventoId(codigo);
-
-		if (evento != null) {
-			if (result.hasErrors()) {
-				ModelAndView mv = new ModelAndView("detalhesEvento");
-				mv.addObject("evento", evento);
-
-				Iterable<Convidado> convidados = cr.findByEvento(evento);
-				mv.addObject("convidados", convidados);
-
-				return mv;
-
-			} else {
-				Convidado convidado = convidadoValidado.toConvidado();
-				convidado.setEvento(evento);
-				cr.save(convidado);
-				eventoService.mensagemSucesso(attributes, "Convidado adicionado com sucesso!");
-			}
-		}
-		return new ModelAndView("redirect:/eventos/detalhes/{codigo}");
-	}
-	
 	@GetMapping("/deletar-evento/{codigo}")
 	public String deletarEvento(@PathVariable("codigo") Long codigo, RedirectAttributes attributes) {
 		if (eventoService.deletarEvento(codigo)) {
@@ -107,25 +79,6 @@ public class EventoController {
 			eventoService.mensagemErro(attributes, "DELETE: Evento [" + codigo + "] não encontrado!");
 		}
 		return "redirect:/eventos";
-	}
-	
-	@GetMapping("/deletar-convidado/{id}")
-	public String deletarConvidado(@PathVariable("id") Long id, RedirectAttributes attributes) {
-		try {
-			Convidado convidado = cr.getById(id);
-			Evento evento = convidado.getEvento();
-			long codigo = evento.getCodigo();
-			String codigoEvento = Long.toString(codigo);
-
-			cr.deleteById(id);
-			// Conflito: mesma coisa do método detalhesEventoPost
-			eventoService.mensagemSucesso(attributes, "Convidado deletado com sucesso!");
-			return "redirect:/eventos/detalhes/" + codigoEvento;
-
-		} catch (NullPointerException error) {
-			eventoService.mensagemErro(attributes, "Convidado não encontrado!");
-			return "redirect:/eventos";
-		}
 	}
 
 	@GetMapping("/editar-evento/{codigo}")
