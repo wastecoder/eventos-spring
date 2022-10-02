@@ -38,11 +38,22 @@ public class Evento implements Serializable{
 	private Set<Convidado> convidados;
 	
 		//Métodos especiais
+	public Evento() {
+	}
+
+	public Evento(Long codigo, String nome, String local, String data, String horario) {
+		this.codigo = codigo;
+		this.nome = nome;
+		this.local = local;
+		this.data = data;
+		this.horario = horario;
+	}
+
 	public Long getCodigo() {
 		return codigo;
 	}
 
-	public void setCodigo(long codigo) {
+	public void setCodigo(Long codigo) {
 		this.codigo = codigo;
 	}
 	

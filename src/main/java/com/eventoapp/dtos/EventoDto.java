@@ -36,6 +36,13 @@ public class EventoDto {
         return evento;
     }
 
+    public EventoDto(String nome, String local, String data, String horario) {
+        this.nome = nome;
+        this.local = local;
+        this.data = data;
+        this.horario = horario;
+    }
+
     public String getNome() {
         return nome;
     }

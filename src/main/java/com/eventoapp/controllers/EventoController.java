@@ -102,11 +102,7 @@ public class EventoController {
 		} else {
 			Evento evento = eventoService.eventoId(codigo);
 			if (evento != null) {
-				evento.setNome(requisicao.getNome());
-				evento.setLocal(requisicao.getLocal());
-				evento.setData(requisicao.getData());
-				evento.setHorario(requisicao.getHorario());
-				eventoService.salvarEvento(evento);
+				eventoService.atualizarEvento(evento, requisicao.toEvento());
 
 				eventoService.mensagemSucesso(attributes, "Evento [" + codigo + "] atualizado com sucesso!");
 				return new ModelAndView("redirect:/eventos");
