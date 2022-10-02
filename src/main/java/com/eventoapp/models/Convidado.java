@@ -21,6 +21,15 @@ public class Convidado {
 	private Evento evento;
 	
 		//Métodos especiais
+	public Convidado() {
+	}
+
+	public Convidado(Long id, String rg, String nomeConvidado) {
+		this.id = id;
+		this.rg = rg;
+		this.nomeConvidado = nomeConvidado;
+	}
+
 	public Long getId() {
 		return id;
 	}

@@ -4,7 +4,6 @@ import com.eventoapp.models.Convidado;
 import com.eventoapp.models.Evento;
 import com.eventoapp.repository.ConvidadoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -33,10 +32,12 @@ public class ConvidadoService {
     }
 
     public boolean deletarConvidado(Long codigo) {
-        try {
+        Convidado retorno = this.convidadoId(codigo);
+
+        if (retorno != null) {
             convidadoRepository.deleteById(codigo);
             return true;
-        } catch (EmptyResultDataAccessException error) {
+        } else {
             return false;
         }
     }

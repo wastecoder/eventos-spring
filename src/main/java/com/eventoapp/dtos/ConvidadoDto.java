@@ -16,6 +16,11 @@ public class ConvidadoDto {
     @Size(min = 3, max = 60, message = "Nome deve ter entre 3 e 60 caracteres")
     private String nomeConvidado;
 
+    public ConvidadoDto(String rg, String nomeConvidado) {
+        this.rg = rg;
+        this.nomeConvidado = nomeConvidado;
+    }
+
     public Convidado toConvidado() {
         Convidado convidado = new Convidado();
         convidado.setRg(this.getRg());
