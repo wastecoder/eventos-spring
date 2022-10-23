@@ -21,9 +21,13 @@ public class EventoService {
         return eventoRepository.findAll();
     }
 
-    public void salvarEvento(Evento evento) {
-        //TODO: Verificar se há um evento igual (nome e local) no banco
-        eventoRepository.save(evento);
+    public boolean salvarEvento(Evento evento) {
+        if (eventoUnico(evento)) {
+            eventoRepository.save(evento);
+            return true;
+        }
+
+        return false;
     }
 
     public Evento eventoId(Long codigo) {
@@ -63,5 +67,25 @@ public class EventoService {
     public void mensagemErro(RedirectAttributes attributes, String messagem) {
         attributes.addFlashAttribute("mensagem", messagem);
         attributes.addFlashAttribute("error", true);
+    }
+
+    //Retorna false se há um evento com o mesmo nome e local já registrado
+    public boolean eventoUnico(Evento eventoNovo) {
+        //TODO: transformar esse método em query e colocar no EventoRepository
+        Iterable<Evento> todosEventos = this.todosEventos();
+        String nomeNovo = eventoNovo.getNome();
+        String localNovo = eventoNovo.getLocal();
+
+        for (Evento eventoAtual : todosEventos) {
+            String nomeAtual = eventoAtual.getNome();
+            String localAtual = eventoAtual.getLocal();
+
+            if (nomeNovo.equalsIgnoreCase(nomeAtual) &&
+                    localNovo.equalsIgnoreCase(localAtual)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

@@ -1,7 +1,5 @@
 package com.eventoapp.models;
 
-import org.hibernate.validator.constraints.UniqueElements;
-
 import java.io.Serializable;
 import java.util.Set;
 

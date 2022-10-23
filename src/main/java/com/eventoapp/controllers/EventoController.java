@@ -48,8 +48,12 @@ public class EventoController {
 		if(result.hasErrors()) {
 			return new ModelAndView("formEvento"); //Retorna e exibe o que já foi preenchido
 		}
-		eventoService.salvarEvento(evento);
-		eventoService.mensagemSucesso(attributes, "Evento cadastrado com sucesso!");
+
+		if (eventoService.salvarEvento(evento)) {
+			eventoService.mensagemSucesso(attributes, "Evento cadastrado com sucesso!");
+		} else {
+			eventoService.mensagemErro(attributes, "Evento com nome e local já cadastrado!");
+		}
 		return new ModelAndView("redirect:/eventos");
 	}
 

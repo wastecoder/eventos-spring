@@ -61,7 +61,9 @@ class EventoServiceTest {
 
     @Test
     @DisplayName("save(): verifica se o objeto enviado e recebido são iguais")
-    void salvarEvento() {
+    void salvarEventoSucesso() {
+        //TODO: 1 - fazer o eventoUnico() retornar true aqui
+        //TODO: 2 - criar o salvarEventoErro(), onde o eventoUnico() retornar false
         //When
         underTest.salvarEvento(eventoValidado);
 
