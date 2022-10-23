@@ -63,7 +63,9 @@ class ConvidadoServiceTest {
 
     @Test
     @DisplayName("save(): verifica se o objeto enviado e recebido são iguais")
-    void salvarConvidado() {
+    void salvarConvidadoSucesso() {
+        //TODO: 1 - fazer o convidadoUnico() retornar true aqui
+        //TODO: 2 - criar o salvarConvidadoErro(), onde o convidadoUnico() retornar false
         //Given
         Convidado convidadoValidado = convidadoDto.toConvidado();
 

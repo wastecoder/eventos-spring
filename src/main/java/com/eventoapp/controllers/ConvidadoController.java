@@ -46,8 +46,11 @@ public class ConvidadoController {
             } else {
                 Convidado convidado = convidadoValidado.toConvidado();
                 convidado.setEvento(evento);
-                convidadoService.salvarConvidado(convidado);
-                eventoService.mensagemSucesso(attributes, "Convidado adicionado com sucesso!");
+                if (convidadoService.salvarConvidado(convidado)) {
+                    eventoService.mensagemSucesso(attributes, "Convidado adicionado com sucesso!");
+                } else {
+                    eventoService.mensagemErro(attributes, "Convidado já cadastrado!");
+                }
             }
         }
         return new ModelAndView("redirect:/eventos/detalhes/{codigo}");

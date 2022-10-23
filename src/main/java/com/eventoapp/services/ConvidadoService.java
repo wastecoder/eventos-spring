@@ -21,8 +21,12 @@ public class ConvidadoService {
         return convidadoRepository.findByEvento(evento);
     }
 
-    public void salvarConvidado(Convidado convidado) {
-        convidadoRepository.save(convidado);
+    public boolean salvarConvidado(Convidado convidado) {
+        if (convidadoUnico(convidado)) {
+            convidadoRepository.save(convidado);
+            return true;
+        }
+        return false;
     }
 
     public Convidado convidadoId(Long codigo) {
@@ -40,5 +44,21 @@ public class ConvidadoService {
         } else {
             return false;
         }
+    }
+
+    //Retorna false se há um RG idêntico no evento atual
+    public boolean convidadoUnico(Convidado convidadoNovo) {
+        Iterable<Convidado> todosConvidados = this.acharPorEvento(convidadoNovo.getEvento());
+        String rgNovo = convidadoNovo.getRg();
+
+        for (Convidado convidadoAtual : todosConvidados) {
+            String rgAtual = convidadoAtual.getRg();
+
+            if (rgNovo.equals(rgAtual)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
