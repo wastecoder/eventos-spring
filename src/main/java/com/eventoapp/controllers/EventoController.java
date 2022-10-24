@@ -52,7 +52,7 @@ public class EventoController {
 		if (eventoService.salvarEvento(evento)) {
 			eventoService.mensagemSucesso(attributes, "Evento cadastrado com sucesso!");
 		} else {
-			eventoService.mensagemErro(attributes, "Evento com nome e local já cadastrado!");
+			eventoService.mensagemErro(attributes, "CREATE: nome e local já cadastrado!");
 		}
 		return new ModelAndView("redirect:/eventos");
 	}
@@ -99,16 +99,19 @@ public class EventoController {
 	}
 
 	@PostMapping("/editar-evento/{codigo}")
-	public ModelAndView salvarEdicaoEvento(@PathVariable("codigo") Long codigo, @Valid EventoDto requisicao, BindingResult result, RedirectAttributes attributes) {
+	public ModelAndView salvarEdicaoEvento(@PathVariable("codigo") Long codigo, @Valid EventoDto eventoAtualizado, BindingResult result, RedirectAttributes attributes) {
 		if(result.hasErrors()) {
 			return new ModelAndView("editarEvento");
 
 		} else {
-			Evento evento = eventoService.eventoId(codigo);
-			if (evento != null) {
-				eventoService.atualizarEvento(evento, requisicao.toEvento());
+			Evento eventoAntigo = eventoService.eventoId(codigo);
+			if (eventoAntigo != null) {
+				if (eventoService.atualizarEvento(eventoAntigo, eventoAtualizado.toEvento())) {
+					eventoService.mensagemSucesso(attributes, "Evento [" + codigo + "] atualizado com sucesso!");
+				} else {
+					eventoService.mensagemErro(attributes, "UPDATE: nome e local já cadastrado!");
+				}
 
-				eventoService.mensagemSucesso(attributes, "Evento [" + codigo + "] atualizado com sucesso!");
 				return new ModelAndView("redirect:/eventos");
 			}
 			return null;

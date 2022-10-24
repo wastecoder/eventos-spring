@@ -23,10 +23,10 @@ Após clonar e importar o repositório, basta configurar o banco de dados:
 - [x] Convidados são removidos automaticamente ao deletar seu evento
 - [x] Pop up de notificação para confirmação e erro das ações de CRUD
 - [x] Camada service como intermediário entre controller e banco de dados
+- [x] Não aceita eventos e convidados ao criar ou atualizar os mesmos
 - [x] Testes da camada service do evento e convidado
 - [ ] Paginação e ordenação
 - [ ] Lombok nas entidades
-- [ ] Não aceita eventos e convidados repetidos
 - [ ] RG como number na entidade
 - [ ] Data como Calendar() na entidade
 - [ ] Data no padrão brasileiro na exibição

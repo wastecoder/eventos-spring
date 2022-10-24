@@ -22,7 +22,7 @@ public class EventoService {
     }
 
     public boolean salvarEvento(Evento evento) {
-        if (eventoUnico(evento)) {
+        if (eventoUnico(evento, -1L)) {
             eventoRepository.save(evento);
             return true;
         }
@@ -47,16 +47,19 @@ public class EventoService {
         }
     }
 
-    public void atualizarEvento(Evento eventoAntigo, Evento eventoAtualizado) {
-        //TODO: Verificar se o evento foi alterado (ambos são iguais)
-        //Se os eventos não foram alterados, não salvar no banco
+    public boolean atualizarEvento(Evento eventoAntigo, Evento eventoAtualizado) {
+        //Verifica se alterou para um nome e local já existente
+        //Não verifica no ID do evento atualizado, pois não alteraria ao mudar só a data ou horário
+        if (eventoUnico(eventoAtualizado, eventoAntigo.getCodigo())) {
+            eventoAntigo.setNome(eventoAtualizado.getNome());
+            eventoAntigo.setLocal(eventoAtualizado.getLocal());
+            eventoAntigo.setData(eventoAtualizado.getData());
+            eventoAntigo.setHorario(eventoAtualizado.getHorario());
 
-        eventoAntigo.setNome(eventoAtualizado.getNome());
-        eventoAntigo.setLocal(eventoAtualizado.getLocal());
-        eventoAntigo.setData(eventoAtualizado.getData());
-        eventoAntigo.setHorario(eventoAtualizado.getHorario());
-
-        this.salvarEvento(eventoAntigo);
+            eventoRepository.save(eventoAntigo);
+            return true;
+        }
+        return false;
     }
 
     public void mensagemSucesso(RedirectAttributes attributes, String messagem) {
@@ -70,7 +73,7 @@ public class EventoService {
     }
 
     //Retorna false se há um evento com o mesmo nome e local já registrado
-    public boolean eventoUnico(Evento eventoNovo) {
+    public boolean eventoUnico(Evento eventoNovo, Long idExistente) {
         //TODO: transformar esse método em query e colocar no EventoRepository
         Iterable<Evento> todosEventos = this.todosEventos();
         String nomeNovo = eventoNovo.getNome();
@@ -79,7 +82,9 @@ public class EventoService {
         for (Evento eventoAtual : todosEventos) {
             String nomeAtual = eventoAtual.getNome();
             String localAtual = eventoAtual.getLocal();
+            Long idAtual = eventoAtual.getCodigo();
 
+            if (idExistente.equals(idAtual)) continue;
             if (nomeNovo.equalsIgnoreCase(nomeAtual) &&
                     localNovo.equalsIgnoreCase(localAtual)) {
                 return false;

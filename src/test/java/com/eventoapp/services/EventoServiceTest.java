@@ -135,7 +135,9 @@ class EventoServiceTest {
 
     @Test
     @DisplayName("atualizarEvento(): verifica se atualizou os atributos")
-    void atualizarEvento() {
+    void atualizarEventoSucesso() {
+        //TODO: 3 - fazer o eventoUnico() retornar true aqui
+        //TODO: 4 - criar o atualizarEventoErro(), onde o eventoUnico() retornar false
         //Given
         evento.setNome(">>>Aurora Boreal<<<");
         evento.setLocal(">>>Ilhas Lofoten<<<");
