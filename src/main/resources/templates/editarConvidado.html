@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="PT-BR" xmlns:th="http://thymeleaf.org">
+
+<head th:replace="fragments/head :: general('Atualização de Convidados')"></head>
+
+<body>
+    <header th:replace="fragments/navbar :: updateObject('Convidados')"></header>
+
+    <main th:replace="fragments/forms :: guest('Atualizar Convidado', ${id})"></main>
+
+    <div th:replace="fragments/bottom"></div>
+</body>
+
+</html>

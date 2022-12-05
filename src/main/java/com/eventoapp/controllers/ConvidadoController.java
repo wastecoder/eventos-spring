@@ -49,7 +49,7 @@ public class ConvidadoController {
                 if (convidadoService.salvarConvidado(convidado)) {
                     eventoService.mensagemSucesso(attributes, "Convidado adicionado com sucesso!");
                 } else {
-                    eventoService.mensagemErro(attributes, "Convidado já cadastrado!");
+                    eventoService.mensagemErro(attributes, "CREATE: RG já cadastrado no evento!");
                 }
             }
         }
@@ -72,5 +72,39 @@ public class ConvidadoController {
         }
         eventoService.mensagemErro(attributes, "DELETE: Convidado [" + id + "] não encontrado!");
         return "redirect:/eventos";
+    }
+
+    @GetMapping("/editar-convidado/{id}")
+    public ModelAndView editarConvidado(@PathVariable("id") Long id, RedirectAttributes attributes){
+        Convidado convidado = convidadoService.convidadoId(id);
+        if (convidado != null) {
+            ModelAndView mv = new ModelAndView("editarConvidado");
+            mv.addObject("convidadoDto", convidado);
+            return mv;
+        }else {
+            eventoService.mensagemErro(attributes,"UPDATE: Convidado [" + id + "] não encontrado!");
+            return new ModelAndView("redirect:/eventos");
+        }
+    }
+
+    @PostMapping("/editar-convidado/{id}")
+    public ModelAndView salvarEdicaoConvidado(@PathVariable("id") Long id, @Valid ConvidadoDto convidadoAtualizado, BindingResult result, RedirectAttributes attributes) {
+        if (result.hasErrors()) {
+            return new ModelAndView("editarConvidado");
+
+        } else {
+            Convidado convidadoAntigo = convidadoService.convidadoId(id);
+            if (convidadoAntigo != null) {
+                if (convidadoService.atualizarConvidado(convidadoAntigo, convidadoAtualizado.toConvidado())) {
+                    eventoService.mensagemSucesso(attributes, "Convidado [" + id + "] atualizado com sucesso!");
+                } else {
+                    eventoService.mensagemErro(attributes, "UPDATE: RG já cadastrado no evento!");
+                }
+
+                Long eventoId = convidadoAntigo.getEvento().getCodigo();
+                return new ModelAndView("redirect:/eventos/detalhes/" + eventoId);
+            }
+            return null;
+        }
     }
 }

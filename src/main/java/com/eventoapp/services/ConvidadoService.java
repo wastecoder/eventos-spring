@@ -22,7 +22,7 @@ public class ConvidadoService {
     }
 
     public boolean salvarConvidado(Convidado convidado) {
-        if (convidadoUnico(convidado)) {
+        if (convidadoUnico(convidado, -1L)) {
             convidadoRepository.save(convidado);
             return true;
         }
@@ -46,14 +46,35 @@ public class ConvidadoService {
         }
     }
 
+    public boolean atualizarConvidado(Convidado convidadoAntigo, Convidado convidadoAtualizado) {
+        if (convidadoUnico(convidadoAtualizado, convidadoAntigo.getId())) {
+            convidadoAntigo.setNomeConvidado(convidadoAtualizado.getNomeConvidado());
+            convidadoAntigo.setRg(convidadoAtualizado.getRg());
+
+            convidadoRepository.save(convidadoAntigo);
+            return true;
+        }
+        return false;
+    }
+
     //Retorna false se há um RG idêntico no evento atual
-    public boolean convidadoUnico(Convidado convidadoNovo) {
-        Iterable<Convidado> todosConvidados = this.acharPorEvento(convidadoNovo.getEvento());
+    public boolean convidadoUnico(Convidado convidadoNovo, Long idExistente) {
         String rgNovo = convidadoNovo.getRg();
+
+        Iterable<Convidado> todosConvidados;
+        if (idExistente == -1) { //Entra aqui apenas no cadastro
+            todosConvidados = this.acharPorEvento(convidadoNovo.getEvento());
+        } else {
+            //Precisa fazer isso porque no atualizarConvidado(), o convidadoAtualizado era um ConvidadoDTO. Ou seja, ele vem sem eventos e o iterable todosConvidados ficaria vazio.
+            //Dessa forma ele vai achar o evento pelo idExistente, não pelo convidadoNovo.
+            todosConvidados = this.acharPorEvento(convidadoId(idExistente).getEvento());
+        }
 
         for (Convidado convidadoAtual : todosConvidados) {
             String rgAtual = convidadoAtual.getRg();
+            Long idAtual = convidadoAtual.getId();
 
+            if (idExistente.equals(idAtual)) continue;
             if (rgNovo.equals(rgAtual)) {
                 return false;
             }

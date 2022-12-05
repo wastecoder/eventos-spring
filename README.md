@@ -15,15 +15,15 @@ Após clonar e importar o repositório, basta configurar o banco de dados:
 
 ## Funcionalidades
 - [x] Friendly URL
-- [x] Fragments do Thymeleaf para reaproveitamento
+- [x] Fragments do Thymeleaf para reaproveitamento de código
 - [x] Dados dos formulários são validados no HTML e Spring
 - [x] Formulários inválidos são retornados preenchidos e informam o erro
-- [x] Usa DTO para prevenir Web Parameter Tampering
+- [x] Usa DTO para prevenir Web Parameter Tampering em eventos e convidados
 - [x] Janela de confirmação para deletar objetos
-- [x] Convidados são removidos automaticamente ao deletar seu evento
-- [x] Pop up de notificação para confirmação e erro das ações de CRUD
+- [x] Convidados são removidos automaticamente ao deletar o seu evento
+- [x] Pop up de notificação para sucesso ou erro das ações de CRUD
 - [x] Camada service como intermediário entre controller e banco de dados
-- [x] Não aceita eventos e convidados ao criar ou atualizar os mesmos
+- [x] Não aceita eventos e convidados repetidos ao criar ou atualizar os mesmos
 - [x] Testes da camada service do evento e convidado
 - [ ] Paginação e ordenação
 - [ ] Lombok nas entidades

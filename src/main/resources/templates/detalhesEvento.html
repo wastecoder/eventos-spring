@@ -42,16 +42,19 @@
                     <tr>
                         <th style="width: 50%;">Nome do Convidado</th>
                         <th>Registro Geral (RG)</th>
-                        <th style="width: 5%;">#</th>
+                        <th style="width: 9%;">#</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr th:each="convidado : ${convidados}">
                         <td th:text="${convidado.nomeConvidado}"></td>
                         <td th:text="${convidado.rg}"></td>
-                        <td>
+                        <td style="padding: 8px 0px; text-align: center;">
+                            <a th:href="${(#mvc.url('CC#editarConvidado').arg(0, convidado.id)).build()}">
+                                <i class="fa-solid fa-pen text-primary"></i>
+                            </a>
                             <a th:attr="onclick=|deleteGuest('${convidado.id}', '${convidado.nomeConvidado}')|" type="button" data-bs-toggle="modal" data-bs-target="#modalId">
-                                    <i class="fas fa-solid fa-trash text-danger"></i>
+                                <i class="fas fa-solid fa-trash text-danger"></i>
                             </a>
                         </td>
                     </tr>
