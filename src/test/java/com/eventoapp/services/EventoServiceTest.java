@@ -10,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.Optional;
 
@@ -57,6 +58,16 @@ class EventoServiceTest {
 
         //Then
         verify(eventoRepository).findAll();
+    }
+
+    @Test
+    @DisplayName("escolherPagina(): verifica se página e registros retornados estão corretos")
+    void escolherPaginaSucesso() {
+        //When
+        underTest.escolherPagina(1);
+
+        //Then
+        verify(eventoRepository).findAll(PageRequest.of(0, 10));
     }
 
     @Test

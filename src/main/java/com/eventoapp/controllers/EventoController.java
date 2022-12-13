@@ -6,6 +6,7 @@ import com.eventoapp.dtos.ConvidadoDto;
 import com.eventoapp.dtos.EventoDto;
 import com.eventoapp.services.EventoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -30,10 +31,40 @@ public class EventoController {
 	private ConvidadoRepository cr;
 
 	@GetMapping
-	public ModelAndView listaEventos() {
+	public ModelAndView primeiraPagina() {
+		return mudarPagina(1);
+	}
+
+	@GetMapping("/pagina/{numeroPagina}")
+	public ModelAndView mudarPagina(@PathVariable("numeroPagina") int paginaSelecionada) {
+		Page<Evento> pagina = eventoService.escolherPagina(paginaSelecionada);
+
+		int totalPaginas = pagina.getTotalPages();
+		int inicioLaco, fimLaco; //Dá para iniciar elas com valores que se repetem, deixei assim para ser mais legível
+		if (totalPaginas <= 5) {
+			inicioLaco = 1;
+			fimLaco = totalPaginas;
+		} else if (paginaSelecionada <= 3) {
+			inicioLaco = 1;
+			fimLaco = 5;
+		} else if (paginaSelecionada < totalPaginas - 2) {
+			inicioLaco = paginaSelecionada - 2;
+			fimLaco = paginaSelecionada + 2;
+		} else {
+			inicioLaco = totalPaginas - 4;
+			fimLaco = totalPaginas;
+		}
+
+		String legenda = "Exibindo " + pagina.getNumberOfElements()
+				+ " de " + pagina.getTotalElements() + " registros";
+
 		ModelAndView mv = new ModelAndView("index");
-		Iterable<Evento> event1 = eventoService.todosEventos();
-		mv.addObject("eventos", event1);
+		mv.addObject("paginaAtual", paginaSelecionada);
+		mv.addObject("totalPaginas", totalPaginas);
+		mv.addObject("inicio", inicioLaco);
+		mv.addObject("fim", fimLaco);
+		mv.addObject("legenda", legenda);
+		mv.addObject("eventos", pagina);
 		return mv;
 	}
 

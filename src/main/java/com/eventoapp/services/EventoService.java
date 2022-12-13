@@ -3,6 +3,9 @@ package com.eventoapp.services;
 import com.eventoapp.models.Evento;
 import com.eventoapp.repository.EventoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -19,6 +22,12 @@ public class EventoService {
 
     public Iterable<Evento> todosEventos() {
         return eventoRepository.findAll();
+    }
+
+    public Page<Evento> escolherPagina(int numeroPagina) {
+        int REGISTROS_POR_PAGINA = 10;
+        Pageable pageable = PageRequest.of(--numeroPagina, REGISTROS_POR_PAGINA); //1ª página = página 0
+        return eventoRepository.findAll(pageable);
     }
 
     public boolean salvarEvento(Evento evento) {
