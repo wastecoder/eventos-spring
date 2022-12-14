@@ -11,6 +11,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import java.util.Optional;
 
@@ -63,11 +64,14 @@ class EventoServiceTest {
     @Test
     @DisplayName("escolherPagina(): verifica se página e registros retornados estão corretos")
     void escolherPaginaSucesso() {
+        //Given
+        Sort ordenacao = Sort.by("codigo").ascending();
+
         //When
-        underTest.escolherPagina(1);
+        underTest.escolherPagina(1, "codigo", "cresc");
 
         //Then
-        verify(eventoRepository).findAll(PageRequest.of(0, 10));
+        verify(eventoRepository).findAll(PageRequest.of(0, 10, ordenacao));
     }
 
     @Test

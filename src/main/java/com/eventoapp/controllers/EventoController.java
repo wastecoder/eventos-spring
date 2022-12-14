@@ -7,6 +7,7 @@ import com.eventoapp.dtos.EventoDto;
 import com.eventoapp.services.EventoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -32,12 +33,12 @@ public class EventoController {
 
 	@GetMapping
 	public ModelAndView primeiraPagina() {
-		return mudarPagina(1);
+		return mudarPagina(1, "codigo", "cresc");
 	}
 
 	@GetMapping("/pagina/{numeroPagina}")
-	public ModelAndView mudarPagina(@PathVariable("numeroPagina") int paginaSelecionada) {
-		Page<Evento> pagina = eventoService.escolherPagina(paginaSelecionada);
+	public ModelAndView mudarPagina(@PathVariable("numeroPagina") int paginaSelecionada, @RequestParam("campo") String campoSelecionado, @RequestParam("ordem") String ordem) {
+		Page<Evento> pagina = eventoService.escolherPagina(paginaSelecionada, campoSelecionado, ordem);
 
 		int totalPaginas = pagina.getTotalPages();
 		int inicioLaco, fimLaco; //Dá para iniciar elas com valores que se repetem, deixei assim para ser mais legível
@@ -60,6 +61,9 @@ public class EventoController {
 
 		ModelAndView mv = new ModelAndView("index");
 		mv.addObject("paginaAtual", paginaSelecionada);
+		mv.addObject("campo", campoSelecionado);
+		mv.addObject("ordem", ordem);
+		mv.addObject("ordemInversa", ordem.equals("cresc") ? "decre" : "cresc");
 		mv.addObject("totalPaginas", totalPaginas);
 		mv.addObject("inicio", inicioLaco);
 		mv.addObject("fim", fimLaco);

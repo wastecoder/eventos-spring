@@ -11,9 +11,24 @@
             <caption>[[${{legenda}}]]</caption>
             <thead>
                 <tr>
-                    <th scope="col">Nome</th>
-                    <th scope="col">Local</th>
-                    <th scope="col">Data</th>
+                    <th scope="col">
+                        <a style="color: white;" th:href="@{/eventos/pagina/{page}(page=${paginaAtual}, campo='nome', ordem=(${campo} == 'nome') ? ${ordemInversa} : ${ordem})}">
+                            <i class="fa-solid fa-sort"></i>
+                            Nome                            
+                        </a>
+                    </th>
+                    <th scope="col">
+                        <a style="color: white;" th:href="@{/eventos/pagina/{page}(page=${paginaAtual}, campo='local', ordem=(${campo} == 'local') ? ${ordemInversa} : ${ordem})}">
+                            <i class="fa-solid fa-sort"></i>
+                            Local                            
+                        </a>
+                    </th>
+                    <th scope="col">
+                        <a style="color: white;" th:href="@{/eventos/pagina/{page}(page=${paginaAtual}, campo='data', ordem=(${campo} == 'data') ? ${ordemInversa} : ${ordem})}">
+                            <i class="fa-solid fa-sort"></i>
+                            Data                            
+                        </a>
+                    </th>
                     <th scope="col">Horário</th>
                     <th scope="col">Ações</th>
                 </tr>

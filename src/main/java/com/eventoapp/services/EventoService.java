@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -24,9 +25,12 @@ public class EventoService {
         return eventoRepository.findAll();
     }
 
-    public Page<Evento> escolherPagina(int numeroPagina) {
-        int REGISTROS_POR_PAGINA = 10;
-        Pageable pageable = PageRequest.of(--numeroPagina, REGISTROS_POR_PAGINA); //1ª página = página 0
+    public Page<Evento> escolherPagina(int numeroDaPagina, String campo, String ordem) {
+        int registrosPorPagina = 10;
+        Sort ordenacao = Sort.by(campo);
+        ordenacao = ordem.equals("cresc") ? ordenacao.ascending() : ordenacao.descending();
+
+        Pageable pageable = PageRequest.of(--numeroDaPagina, registrosPorPagina, ordenacao);
         return eventoRepository.findAll(pageable);
     }
 
