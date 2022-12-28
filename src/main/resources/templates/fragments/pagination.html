@@ -1,4 +1,4 @@
-<nav th:fragment="pagination" aria-label="pagination">  
+<nav th:fragment="evento" aria-label="pagination">  
     <ul class="pagination pagination-lg justify-content-center">
         <li class="page-item" th:classappend="${paginaAtual > 1} ? '' : 'disabled'">
             <a class="page-link" th:href="@{/eventos/pagina/1(campo=${campo}, ordem=${ordem})}">
@@ -27,6 +27,42 @@
 
         <li class="page-item" th:classappend="${paginaAtual != totalPaginas} ? '' : 'disabled'">
             <a class="page-link" th:href="@{/eventos/pagina/{page}(page=${totalPaginas},campo=${campo}, ordem=${ordem})}">
+                <i class="fa-solid fa-angles-right"></i>
+            </a>
+        </li>
+    </ul>
+</nav>
+
+<!-- TODO: juntar com o de cima, muda apenas o th:href -->
+<nav th:fragment="convidado" aria-label="pagination">  
+    <ul class="pagination pagination-lg justify-content-center">
+        <li class="page-item" th:classappend="${paginaAtual > 1} ? '' : 'disabled'">
+            <a class="page-link" th:href="@{/eventos/detalhes/{evento}(evento=${codigo}, pagina=1, campo=${campo}, ordem=${ordem})}">
+                <i class="fa-solid fa-angles-left"></i>
+            </a>
+        </li>
+
+        <li class="page-item" th:classappend="${paginaAtual > 1} ? '' : 'disabled'">
+            <a class="page-link" th:href="@{/eventos/detalhes/{evento}(evento=${codigo}, pagina=${paginaAtual-1}, campo=${campo}, ordem=${ordem})}">
+                <i class="fa-solid fa-angle-left"></i>
+            </a>
+        </li>
+
+        <th:block th:each="i: ${#numbers.sequence(inicio, fim)}">
+            <li class="page-item" th:classappend="${i != paginaAtual} ? '' : 'active'">
+                <a class="page-link" th:if="${i != paginaAtual}" th:href="@{/eventos/detalhes/{evento}(evento=${codigo}, pagina=${i}, campo=${campo}, ordem=${ordem})}">[[${{i}}]]</a>
+                <a class="page-link" th:unless="${i != paginaAtual}">[[${{i}}]]</a>
+            </li>
+        </th:block>
+
+        <li class="page-item" th:classappend="${paginaAtual != totalPaginas} ? '' : 'disabled'">
+            <a class="page-link" th:href="@{/eventos/detalhes/{evento}(evento=${codigo}, pagina=${paginaAtual+1}, campo=${campo}, ordem=${ordem})}">
+                <i class="fa-solid fa-angle-right"></i>
+            </a>
+        </li>
+
+        <li class="page-item" th:classappend="${paginaAtual != totalPaginas} ? '' : 'disabled'">
+            <a class="page-link" th:href="@{/eventos/detalhes/{evento}(evento=${codigo}, pagina=${totalPaginas}, campo=${campo}, ordem=${ordem})}">
                 <i class="fa-solid fa-angles-right"></i>
             </a>
         </li>

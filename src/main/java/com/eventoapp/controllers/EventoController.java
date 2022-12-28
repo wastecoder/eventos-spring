@@ -4,10 +4,10 @@ import javax.validation.Valid;
 
 import com.eventoapp.dtos.ConvidadoDto;
 import com.eventoapp.dtos.EventoDto;
+import com.eventoapp.services.ConvidadoService;
 import com.eventoapp.services.EventoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -16,23 +16,23 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.eventoapp.models.Convidado;
 import com.eventoapp.models.Evento;
-import com.eventoapp.repository.ConvidadoRepository;
 
 @Controller
 @RequestMapping("/eventos")
 public class EventoController {
 	private final EventoService eventoService;
+	private final ConvidadoService convidadoService;
 
 	@Autowired
-	public EventoController(EventoService eventoService) {
+	public EventoController(EventoService eventoService, ConvidadoService convidadoService) {
 		this.eventoService = eventoService;
+		this.convidadoService = convidadoService;
 	}
-
-	@Autowired
-	private ConvidadoRepository cr;
 
 	@GetMapping
 	public ModelAndView primeiraPagina() {
+		//Depois alterar "codigo" para "nome"
+		//Deixei assim para facilitar os meus testes manuais
 		return mudarPagina(1, "codigo", "cresc");
 	}
 
@@ -40,35 +40,10 @@ public class EventoController {
 	public ModelAndView mudarPagina(@PathVariable("numeroPagina") int paginaSelecionada, @RequestParam("campo") String campoSelecionado, @RequestParam("ordem") String ordem) {
 		Page<Evento> pagina = eventoService.escolherPagina(paginaSelecionada, campoSelecionado, ordem);
 
-		int totalPaginas = pagina.getTotalPages();
-		int inicioLaco, fimLaco; //Dá para iniciar elas com valores que se repetem, deixei assim para ser mais legível
-		if (totalPaginas <= 5) {
-			inicioLaco = 1;
-			fimLaco = totalPaginas;
-		} else if (paginaSelecionada <= 3) {
-			inicioLaco = 1;
-			fimLaco = 5;
-		} else if (paginaSelecionada < totalPaginas - 2) {
-			inicioLaco = paginaSelecionada - 2;
-			fimLaco = paginaSelecionada + 2;
-		} else {
-			inicioLaco = totalPaginas - 4;
-			fimLaco = totalPaginas;
-		}
-
-		String legenda = "Exibindo " + pagina.getNumberOfElements()
-				+ " de " + pagina.getTotalElements() + " registros";
-
 		ModelAndView mv = new ModelAndView("index");
-		mv.addObject("paginaAtual", paginaSelecionada);
-		mv.addObject("campo", campoSelecionado);
-		mv.addObject("ordem", ordem);
-		mv.addObject("ordemInversa", ordem.equals("cresc") ? "decre" : "cresc");
-		mv.addObject("totalPaginas", totalPaginas);
-		mv.addObject("inicio", inicioLaco);
-		mv.addObject("fim", fimLaco);
-		mv.addObject("legenda", legenda);
+		eventoService.paginacao(pagina, paginaSelecionada, campoSelecionado, ordem, mv);
 		mv.addObject("eventos", pagina);
+
 		return mv;
 	}
 
@@ -93,15 +68,16 @@ public class EventoController {
 	}
 
 	@GetMapping("/detalhes/{codigo}")
-	public ModelAndView detalhesEvento(@PathVariable("codigo") Long codigo, RedirectAttributes attributes, ConvidadoDto convidadoDto) {
+	public ModelAndView detalhesEvento(@PathVariable("codigo") Long codigo, @RequestParam(value = "pagina", defaultValue = "1") int paginaSelecionada, @RequestParam(value = "campo", defaultValue = "nomeConvidado") String campoSelecionado, @RequestParam(value = "ordem", defaultValue = "cresc") String ordem, RedirectAttributes attributes, ConvidadoDto convidadoDto) {
 		Evento evento = eventoService.eventoId(codigo);
 
 		if (evento != null) {
-			ModelAndView mv = new ModelAndView("detalhesEvento");
-			mv.addObject("evento", evento);
+			Page<Convidado> pagina = convidadoService.escolherPagina(paginaSelecionada, campoSelecionado, ordem, evento);
 
-			Iterable<Convidado> convidados1 = cr.findByEvento(evento);
-			mv.addObject("convidados", convidados1);
+			ModelAndView mv = new ModelAndView("detalhesEvento");
+			eventoService.paginacao(pagina, paginaSelecionada, campoSelecionado, ordem, mv);
+			mv.addObject("evento", evento);
+			mv.addObject("convidados", pagina);
 
 			return mv;
 		} else {

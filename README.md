@@ -25,7 +25,7 @@ Após clonar e importar o repositório, basta configurar o banco de dados:
 - [x] Camada service como intermediário entre controller e banco de dados
 - [x] Não aceita eventos e convidados repetidos ao criar ou atualizar os mesmos
 - [x] Testes da camada service do evento e convidado
-- [x] Paginação e ordenação para eventos
+- [x] Paginação e ordenação para eventos e convidados
 - [ ] Lombok nas entidades
 - [ ] RG como number na entidade
 - [ ] Data como Calendar() na entidade

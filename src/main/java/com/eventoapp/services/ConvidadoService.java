@@ -4,6 +4,10 @@ import com.eventoapp.models.Convidado;
 import com.eventoapp.models.Evento;
 import com.eventoapp.repository.ConvidadoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -19,6 +23,16 @@ public class ConvidadoService {
 
     public Iterable<Convidado> acharPorEvento(Evento evento) {
         return convidadoRepository.findByEvento(evento);
+    }
+
+    public Page<Convidado> escolherPagina(int numeroPagina, String campo, String ordem, Evento evento) {
+        int registrosPorPagina = 4;
+        Sort ordenacao = Sort.by(campo);
+        ordenacao = ordem.equals("cresc") ? ordenacao.ascending() : ordenacao.descending();
+
+        Pageable pageable = PageRequest.of(--numeroPagina, registrosPorPagina, ordenacao);
+
+        return convidadoRepository.findAllByEvento(evento, pageable);
     }
 
     public boolean salvarConvidado(Convidado convidado) {

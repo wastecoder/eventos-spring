@@ -37,11 +37,21 @@
             <h2 class="form-title">Lista de convidados</h2>
 
             <table class="table table-dark table-bordered table-hover smaller-center">
-                <caption>Convidados cadastrados</caption>
+                <caption th:text="${legenda}">Convidados cadastrados</caption>
                 <thead>
                     <tr>
-                        <th style="width: 50%;">Nome do Convidado</th>
-                        <th>Registro Geral (RG)</th>
+                        <th style="width: 50%;">
+                            <a style="color: white;" th:href="@{/eventos/detalhes/{evento}(evento=${codigo}, pagina=${paginaAtual}, campo='nomeConvidado', ordem=(${campo} == 'nomeConvidado') ? ${ordemInversa} : ${ordem})}">
+                                <i class="fa-solid fa-sort"></i>
+                                Nome do Convidado
+                            </a>
+                        </th>
+                        <th>
+                            <a style="color: white;" th:href="@{/eventos/detalhes/{evento}(evento=${codigo}, pagina=${paginaAtual}, campo='rg', ordem=(${campo} == 'rg') ? ${ordemInversa} : ${ordem})}">
+                                <i class="fa-solid fa-sort"></i>
+                                Registro Geral (RG)
+                            </a>
+                        </th>
                         <th style="width: 9%;">#</th>
                     </tr>
                 </thead>
@@ -61,6 +71,8 @@
                 </tbody>
             </table>
         </div>
+
+        <th:block th:replace="fragments/pagination :: convidado"></th:block>
     </main>
 
     <div th:replace="fragments/modal :: delete('convidado')"></div>

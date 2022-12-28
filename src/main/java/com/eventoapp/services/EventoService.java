@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Optional;
@@ -105,5 +106,37 @@ public class EventoService {
         }
 
         return true;
+    }
+
+    //T para aceitar Page<> de Evento e Convidado
+    public <T> void paginacao(Page<T> pagina, int paginaSelecionada, String campoSelecionado, String ordem, ModelAndView mv) {
+        int totalPaginas = pagina.getTotalPages() == 0 ? 1 : pagina.getTotalPages(); //Caso tenha 0 registro, os botões ficariam: 1, 0
+
+        int inicioLaco, fimLaco; //Dá para iniciar elas com valores que se repetem, deixei assim para ser mais legível
+        if (totalPaginas <= 5) {
+            inicioLaco = 1;
+            fimLaco = totalPaginas;
+        } else if (paginaSelecionada <= 3) {
+            inicioLaco = 1;
+            fimLaco = 5;
+        } else if (paginaSelecionada < totalPaginas - 2) {
+            inicioLaco = paginaSelecionada - 2;
+            fimLaco = paginaSelecionada + 2;
+        } else {
+            inicioLaco = totalPaginas - 4;
+            fimLaco = totalPaginas;
+        }
+
+        String legenda = "Exibindo " + pagina.getNumberOfElements()
+                + " de " + pagina.getTotalElements() + " registros";
+
+        mv.addObject("paginaAtual", paginaSelecionada);
+        mv.addObject("campo", campoSelecionado);
+        mv.addObject("ordem", ordem);
+        mv.addObject("ordemInversa", ordem.equals("cresc") ? "decre" : "cresc");
+        mv.addObject("totalPaginas", totalPaginas);
+        mv.addObject("inicio", inicioLaco);
+        mv.addObject("fim", fimLaco);
+        mv.addObject("legenda", legenda);
     }
 }
