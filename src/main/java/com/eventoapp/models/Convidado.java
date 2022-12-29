@@ -1,9 +1,14 @@
 package com.eventoapp.models;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "Convidado")
+@Getter @Setter @NoArgsConstructor
 public class Convidado {
 		//Atributos - colunas da tabela
 	@Id
@@ -21,40 +26,9 @@ public class Convidado {
 	private Evento evento;
 	
 		//Métodos especiais
-	public Convidado() {
-	}
-
 	public Convidado(Long id, String rg, String nomeConvidado) {
 		this.id = id;
 		this.rg = rg;
 		this.nomeConvidado = nomeConvidado;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public String getRg() {
-		return rg;
-	}
-	
-	public void setRg(String rg) {
-		this.rg = rg;
-	}
-	
-	public String getNomeConvidado() {
-		return nomeConvidado;
-	}
-	
-	public void setNomeConvidado(String nomeConvidado) {
-		this.nomeConvidado = nomeConvidado;
-	}
-	
-	public Evento getEvento() {
-		return evento;
-	}
-
-	public void setEvento(Evento evento) {
-		this.evento = evento;
 	}
 }

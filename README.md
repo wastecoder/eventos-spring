@@ -26,7 +26,7 @@ Após clonar e importar o repositório, basta configurar o banco de dados:
 - [x] Não aceita eventos e convidados repetidos ao criar ou atualizar os mesmos
 - [x] Testes da camada service do evento e convidado
 - [x] Paginação e ordenação para eventos e convidados
-- [ ] Lombok nas entidades
+- [x] Lombok nas entidades
 - [ ] RG como number na entidade
 - [ ] Data como Calendar() na entidade
 - [ ] Data no padrão brasileiro na exibição

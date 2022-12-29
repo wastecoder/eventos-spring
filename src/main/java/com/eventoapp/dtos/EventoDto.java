@@ -1,6 +1,9 @@
 package com.eventoapp.dtos;
 
 import com.eventoapp.models.Evento;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -11,6 +14,7 @@ import javax.validation.constraints.Size;
 // EventoDto = valida os formulários do evento
 // Evento = configura a criação de tabela
 // OBS: Se colocar @Entity criará uma tabela no banco
+@Getter @Setter @AllArgsConstructor
 public class EventoDto {
     @NotEmpty(message = "Nome não pode ser vazio")
     @NotBlank(message = "Nome não pode começar com espaço")
@@ -34,44 +38,5 @@ public class EventoDto {
         evento.setData(this.getData());
         evento.setHorario(this.getHorario());
         return evento;
-    }
-
-    public EventoDto(String nome, String local, String data, String horario) {
-        this.nome = nome;
-        this.local = local;
-        this.data = data;
-        this.horario = horario;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getLocal() {
-        return local;
-    }
-
-    public void setLocal(String local) {
-        this.local = local;
-    }
-
-    public String getData() {
-        return data;
-    }
-
-    public void setData(String data) {
-        this.data = data;
-    }
-
-    public String getHorario() {
-        return horario;
-    }
-
-    public void setHorario(String horario) {
-        this.horario = horario;
     }
 }

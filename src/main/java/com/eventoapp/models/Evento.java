@@ -1,5 +1,9 @@
 package com.eventoapp.models;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.io.Serializable;
 import java.util.Set;
 
@@ -14,6 +18,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "Evento")
+@Getter @Setter @NoArgsConstructor
 public class Evento implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
@@ -36,54 +41,11 @@ public class Evento implements Serializable{
 	private Set<Convidado> convidados;
 	
 		//Métodos especiais
-	public Evento() {
-	}
-
 	public Evento(Long codigo, String nome, String local, String data, String horario) {
 		this.codigo = codigo;
 		this.nome = nome;
 		this.local = local;
 		this.data = data;
-		this.horario = horario;
-	}
-
-	public Long getCodigo() {
-		return codigo;
-	}
-
-	public void setCodigo(Long codigo) {
-		this.codigo = codigo;
-	}
-	
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-	
-	public String getLocal() {
-		return local;
-	}
-	
-	public void setLocal(String local) {
-		this.local = local;
-	}
-	
-	public String getData() {
-		return data;
-	}
-	
-	public void setData(String data) {
-		this.data = data;
-	}
-	
-	public String getHorario() {
-		return horario;
-	}
-	
-	public void setHorario(String horario) {
 		this.horario = horario;
 	}
 }
