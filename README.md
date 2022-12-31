@@ -27,8 +27,8 @@ Após clonar e importar o repositório, basta configurar o banco de dados:
 - [x] Testes da camada service do evento e convidado
 - [x] Paginação e ordenação para eventos e convidados
 - [x] Lombok nas entidades
-- [ ] RG como number na entidade
-- [ ] Data como Calendar() na entidade
-- [ ] Data no padrão brasileiro na exibição
+- [x] Datas como LocalDate na entidade e DTO
+- [x] Datas no padrão brasileiro na exibição
+- [ ] RG como number na entidade e DTO
 - [ ] Input mask no RG
 - [ ] RG validado no DTO

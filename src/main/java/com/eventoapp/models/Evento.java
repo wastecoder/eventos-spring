@@ -3,8 +3,10 @@ package com.eventoapp.models;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -32,7 +34,8 @@ public class Evento implements Serializable{
 	@Column(nullable = false, length = 30)
 	private String local;
 	@Column(nullable = false, length = 10)
-	private String data;
+	@DateTimeFormat(pattern = "yyyy-MM-dd") //Se tirar, a data vem vazia ao editar
+	private LocalDate data;
 	@Column(nullable = false, length = 5)
 	private String horario;
 	
@@ -41,7 +44,7 @@ public class Evento implements Serializable{
 	private Set<Convidado> convidados;
 	
 		//Métodos especiais
-	public Evento(Long codigo, String nome, String local, String data, String horario) {
+	public Evento(Long codigo, String nome, String local, LocalDate data, String horario) {
 		this.codigo = codigo;
 		this.nome = nome;
 		this.local = local;

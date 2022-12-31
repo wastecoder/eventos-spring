@@ -24,7 +24,7 @@
                     <tr>
                         <td th:text="${evento.nome}"></td>
                         <td th:text="${evento.local}"></td>
-                        <td th:text="${evento.data}" style="width: 17%;">2</td>
+                        <td th:text="${#temporals.format(evento.data, 'dd/MM/yyyy')}" style="width: 17%;">2</td>
                         <td th:text="${evento.horario}" style="width: 8%"></td>
                     </tr>
                 </tbody>

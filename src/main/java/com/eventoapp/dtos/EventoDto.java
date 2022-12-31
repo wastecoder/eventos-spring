@@ -4,10 +4,10 @@ import com.eventoapp.models.Evento;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
+import java.time.LocalDate;
 
 // Classe DTO para evitar Web Parameter Tampering
 // Tirei o ID, assim não tem como o usuário manipular o ID
@@ -24,9 +24,9 @@ public class EventoDto {
     @NotBlank(message = "Local não pode começar com espaço")
     @Size(min = 10, max = 30, message = "Local deve ter entre 10 e 30 caracteres")
     private String local;
-    @NotEmpty @NotBlank
-    @Size(min = 8, max = 10)
-    private String data;
+    @NotNull //@FutureOrPresent Não permite atualizar eventos com datas no passado
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate data; //Validações Empty, Blank e Size são válidas apenas para Strings, não datas
     @NotEmpty @NotBlank
     @Size(min = 4, max = 5)
     private String horario;

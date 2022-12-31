@@ -13,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -24,7 +25,7 @@ class EventoServiceTest {
     public static final Long ID = 1L;
     public static final String NOME = "Aurora Boreal";
     public static final String LOCAL = "Ilhas Lofoten";
-    public static final String DATA = "2022-10-01";
+    public static final LocalDate DATA = LocalDate.of(2022, 10, 1);
     public static final String HORARIO = "01:10";
 
     private Evento evento;
