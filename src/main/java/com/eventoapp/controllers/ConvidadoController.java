@@ -6,6 +6,7 @@ import com.eventoapp.models.Evento;
 import com.eventoapp.services.ConvidadoService;
 import com.eventoapp.services.EventoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,11 +36,12 @@ public class ConvidadoController {
 
         if (evento != null) {
             if (result.hasErrors()) {
-                ModelAndView mv = new ModelAndView("detalhesEvento");
-                mv.addObject("evento", evento);
+                Page<Convidado> pagina = convidadoService.escolherPagina(1, "nomeConvidado", "cresc", evento);
 
-                Iterable<Convidado> convidados = convidadoService.acharPorEvento(evento);
-                mv.addObject("convidados", convidados);
+                ModelAndView mv = new ModelAndView("detalhesEvento");
+                eventoService.paginacao(pagina, 1, "nomeConvidado", "cresc", mv);
+                mv.addObject("evento", evento);
+                mv.addObject("convidados", pagina);
 
                 return mv;
 

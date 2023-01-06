@@ -1,6 +1,7 @@
 package com.eventoapp.dtos;
 
 import com.eventoapp.models.Convidado;
+import com.eventoapp.validations.RgConvidado;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,6 +15,7 @@ public class ConvidadoDto {
     @NotEmpty(message = "RG não pode ser vazio")
     @NotBlank(message = "RG não pode começar com espaço")
     @Size(min = 9, max = 12, message = "RG deve ter entre 9 e 12 caracteres")
+    @RgConvidado(message = "RG com valores ou símbolos inválidos")
     private String rg;
     @NotEmpty(message = "Nome não pode ser vazio")
     @NotBlank(message = "Nome não pode começar com espaço")
