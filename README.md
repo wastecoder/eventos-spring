@@ -30,4 +30,4 @@ Após clonar e importar o repositório, basta configurar o banco de dados:
 - [x] Datas como LocalDate no evento
 - [x] Datas no padrão brasileiro na exibição
 - [x] RG com sintaxe validada no DTO
-- [ ] Input mask no RG
+- [x] Input mask no RG

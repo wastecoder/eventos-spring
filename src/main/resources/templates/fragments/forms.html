@@ -49,8 +49,8 @@
             </div>
 
             <div class="form-floating col-md-12">
-                <input type="text" class="form-control" placeholder=" " th:field="*{rg}" th:errorclass="is-invalid" required maxlength="12">
-                <label>RG (com símbolos)</label>
+                <input type="text" class="form-control" placeholder=" " th:field="*{rg}" th:errorclass="is-invalid" required maxlength="12" id="rgInput">
+                <label>RG</label>
                 <div class="invalid-feedback" th:errors="*{rg}"></div>
             </div>
 

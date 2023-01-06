@@ -9,6 +9,12 @@
     <main th:replace="fragments/forms :: guest('Atualizar Convidado', ${id})"></main>
 
     <div th:replace="fragments/bottom"></div>
+
+    <script>
+		$(document).ready(function(){
+			$("#rgInput").inputmask("99.999.999-9");
+    	});
+	</script>
 </body>
 
 </html>
